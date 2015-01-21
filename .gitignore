@@ -1,0 +1,12 @@
+# Always Ignore
+.blend1
+.blend~1
+previous_versions/
+
+# Ignore media creation dirs until I weed out stuff that would be a waste space on GitHub
+assets/graphics/gimp/
+assets/music/sunvox/
+assets/sounds/audacity/
+assets/models/blender/
+
+

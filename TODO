@@ -1,0 +1,198 @@
+TODO - High Level Project Attack Plan
+======================================
+
+001 - Completed
+~~~~~~
+- Repurpose the vehicle_controller_demo blend file
+- WASD FPS style keyboard layout
+-----------------
+
+002 - Completed
+~~~~~~
+- Level/Scene pattern that will be used for all 7 levels.
+- First character model ("shape").
+- Ground, skybox textures.
+-----------------
+
+003 - In progress
+~~~~~~
+- Mouse movement for steering left/right. 
+- Handling min/max tuning.
+- First complete character model to determine final feel of movement, camera angles/movement, and scale.
+- Test structures, pathways, and scale to make for fun movement.
+-----------------
+
+
+~~~~~~
+- Add Turbo, Jump, Brake
+- Create primary and secondary abilities.
+- Bind primary ability to Left Mouse Button.
+- Bind secondary ability to Right Mouse Button.
+-----------------
+
+
+~~~~~~
+- Save/Load settings and game state in config files for persistence.
+-----------------
+
+
+~~~~~~
+- Create the UI
+- Welcome Screen: Create/Select Profile, Settings Button, Play Button
+- In Game UI: Health / Energy / Cargo Bar (inactive at this point)
+- Puzzle UI: Opens as a window in the Game Play UI where the puzzle game is played.
+- Menu: Inventory, Character Customization, Exit Game Button. 
+-----------------
+
+
+~~~~~~
+- Allow player to select primary and secondary abilities on the Menu.
+-----------------
+
+
+~~~~~~
+- Add 5 additional character "shapes" with unique models and stats.
+- Allow player to switch between shapes on the Menu.
+- Change the cargo bar ui element depending on which shape is equiped.
+-----------------
+
+
+~~~~~~
+- Open up some movement and ability values for player tuning.
+- Add 3 "load out" customization boxes per shape in the Menu.
+- Allow player to choose 3 stats to customize and L/R Mouse ability per load out. 
+- Load outs saved/loaded to/from setting file.
+- Add Customization Point System
+- CPs are used to increase the 3 stats in a load out. 4 Points can be spent per stat. 
+- Player starts with 2 CPs and earns 1 each time they complete all 5 puzzle fountains on a map (except the final map), for 8 total points to spend.
+-----------------
+
+
+~~~~~~
+- Add the Chaoties.
+- Wait random amount of time before respawning after hitting a trigger.
+- Fountain puzzles will be on the "path" that the AI will follow, so if the player doens't stop them, they will at some point hit the fountains and then teleport somewhere else.
+- Effects to player when interacting with the Chaoties.
+- Effects to Chaoties when player interacts with them, such as:
+- Warp to random location on the map when hit by certain player abilities, destruction, conversion into cargo energy, etc.
+-----------------
+
+
+~~~~~~
+- Introduce the Energy System.
+- Collect energy shapes and add them to the Menu inventory, to a max of 20 of each type.
+- Collected energy shows in the cargo bar. 
+- Adding energy to your storage can be done by pressing the 0 key while near a puzzle fountian (action trigger).
+- Display energy storage in Menu. 
+- Add a basic puzzle fountain structure for testing.
+-----------------
+
+
+~~~~~~
+- Add energy costs to customization stats and shapes.
+- Require energy amounts of the correct type to be in storage before allowing the use of a load out. 
+- Remove energy from storage upon using a load out. 
+-----------------
+
+
+~~~~~~
+- Energy costs to ability usage.
+- Energy Bar functions.
+- Health Bar functions. 
+- Respawn at start location when Health is depleted.
+- Cargo lost when respawning.
+-----------------
+
+
+~~~~~~
+- Chaoties can randomly add energy to the players cargo bar when the player defeats them.
+- Sound effects for Chaoties.
+- Sound effects for player actions/abilities.
+- "Engine" sound effects for each of the "vehicle" shapes.
+-----------------
+
+
+~~~~~~
+- Add Puzzle Fountain Game
+- Create patterns for each fountain on first map load, store them in config file.
+- Randomize active pattern (level) upon interaction with a Chaoty.
+- Display pattern, one shape at a time when the UI window is active.
+- Remove energy from cargo bar upon button press (1 - 8) while at a fountain.
+- If energy selected matches energy showing, change state of that part of pattern to solved.
+- If energy selected did not match energy showing, the energy is just removed from the cargo bar (wasted essentially). 
+- Move up to next pattern (level) when all parts of the current pattern are solved.
+- Lock fountain as completed when all pattern (levels) are completed. 
+- Grant 1 Customization Point when all 5 fountains on a map are solved.
+-----------------
+
+
+~~~~~~
+- Artistic pass on all existing assets, including:
+- Character models.
+- Chaoties.
+- Skybox textures.
+- Sound effects.
+- Graphical special effects (creation and/or completion).
+-----------------
+
+
+~~~~~~
+- Complete Blue Side (starting) map.
+- Theme: Open space, blocks, ramps, tubes.
+-----------------
+
+
+~~~~~~
+- Complete Green Side map.
+- Theme: Forest, canyons, bridges.
+-----------------
+
+
+~~~~~~
+- Complete Red Side map.
+- Theme: Infared, old school space fighter, mostly flat with jumps.
+-----------------
+
+
+~~~~~~
+- Complete Yellow Side map.
+- Theme: Linux, Tux, tracks through and around structures.
+-----------------
+
+
+~~~~~~
+- Complete Purple Side map.
+- Theme: Dark, spooky forest, mostly flat
+-----------------
+
+
+~~~~~~
+- Complete Pink Side map.
+- Theme: Bubble gum fun! Circles, moving platforms.
+-----------------
+
+
+~~~~~~
+- Complete Final map.
+- Theme: Chaotic energy, hills/spikes/mountains, roads, broken birdges, jumps.
+-----------------
+
+
+~~~~~~
+- Music completion.
+- Final QA pass on art and game play.
+- Create ending cut scene. 
+-----------------
+
+
+~~~~~~
+- Final release!
+-----------------
+
+
+~~~~~~
+- Bug fixes. 
+- I will not be adding addtional content or expansions to the game beyond the final release - it's going to take me YEARS just to get to that point! :)
+-----------------
+
+

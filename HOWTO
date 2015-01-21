@@ -1,0 +1,62 @@
+==============================
+Loop Dipole and the Chaoties
+==============================
+How To Use This Project!
+------------------------------
+
+================
+File Structure
+================
+
+loop_dipole_###.blend
+- The current version of the game.
+- This file depends on files in the asset directory.
+
+CREDITS
+- Credits for the project
+
+HOWTO
+- This file!
+
+LICENSE
+- A copy of the General Public License, Version 3.
+
+README.md
+- Description of the project.
+
+TODO
+- A check list of things I need to accomplish to complete the game.
+
+assets/
+- Files used as libaries for the main game.
+
+assets/graphics/gimp/
+assets/music/sunvox/
+assets/sounds/audacity/
+assets/models/blender/
+- Files used to create the content for the game.
+- These are not required to run the game and, to save space, they are not currently on GitHub.
+
+download/
+- Packed installers for Linux and Windows.
+
+previous_versions/
+- Redundant backups of older game versions. 
+- These are not on GitHub, to save space.
+
+
+==================
+Running the Game
+==================
+
+See download/README for the most up to date way to run the game!
+
+
+========================
+Working on .blend file
+========================
+
+To reduce the file size of the main game file, as GitHub has a file size limit and because it's generally a good idea, I have linked assets into the main game file using the library feature of Blender. As such, to use the loop_dipole_###.blend file, you will also need to download the assets directory. The easiest way to ensure you have what you need is to clone or download the repo. Your setup should look like so, 
+
+assets/
+loop_dipole_###.blend
