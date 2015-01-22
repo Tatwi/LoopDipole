@@ -1,5 +1,5 @@
 # Always Ignore
-*.blend1
+*.blend1*
 *.blend~1
 previous_versions/
 
