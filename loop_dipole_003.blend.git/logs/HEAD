@@ -1,3 +1,4 @@
 0000000000000000000000000000000000000000 41f7fcf5f8b0b1476468b87ed6b88ac99ded8163 rob <rbassettjr@tpot.ca> 1422138696 -0500	commit (initial): C1 - Starting repo
 41f7fcf5f8b0b1476468b87ed6b88ac99ded8163 90dc1f396231ced8c370c86d294aef26cdb16d11 rob <rbassettjr@tpot.ca> 1422138713 -0500	commit: C1 - Starting repo
 90dc1f396231ced8c370c86d294aef26cdb16d11 c705690f5a74cb1a3c1f9481798ea041a68d23c1 rob <rbassettjr@tpot.ca> 1422166630 -0500	commit: C2 - Added gliding and turbo
+c705690f5a74cb1a3c1f9481798ea041a68d23c1 9fd22c2195f29c858e06bdd2c929b639b7435450 rob <rbassettjr@tpot.ca> 1422251523 -0500	commit: Added stats per shape, a 4th shape, restructured variables, tuned gliding and handling
