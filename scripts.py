@@ -74,20 +74,21 @@ def resetStats():
     logic.car.linVelocityMax = 40
     
     ## Default Shape
-    logic.car["activeShape"] = 0
+    logic.car["activeShape"] = 1
     
     logic.car["accelNormal"] = -10.0
     logic.car["accelTurbo"] = -14.0
     logic.car["turboDur"] = 5.0
     logic.car["brakeForce"] = 15.0
     logic.car["steerAmount"] = 0.1
-    
-    ## Lift impulse or "jump" 0.0, Forward, Up
-    logic.car.actuators["Glide"].linV  = [ 0.0, 0.1, 0.25]
-    
-    logic.car["glidecooldown"] = 10
+  
+    logic.car["glideCooldown"] = 10
+    logic.car["glideDur"] = 5
     logic.car["glideBonusY"] = 0.2
     logic.car["glideBonusZ"] = 0.2
+    ## Lift impulse or "jump"
+    logic.car["glideJumpY"] = 0.1
+    logic.car["glideJumpZ"] = 0.43
   
     ## Base Stats
     bstat = logic.scene.objects["BaseStats"]
@@ -186,6 +187,7 @@ def carHandler():
     
     ## store old values ##
     logic.car["dS"] = S
+    logic.car["SpeedDelta"] = (logic.car["speed"] + 1) / logic.car["dS"]
 
 
 ## Set all player shapes invisible
@@ -214,17 +216,19 @@ def changeShape(choice):
         ## Bomber
         ## Higher top speed, slow turning, stable, does not take damage
         logic.scene.objects["Loop 2_proxy"].setVisible(True)
-        logic.car["activeShape"] = 1
+        logic.car["activeShape"] = 2
         logic.car.linVelocityMax = 90
-        logic.car["glideBonusY"] = 0.8
-        logic.car["glideBonusZ"] = 0.33
-        logic.car["glidecooldown"] = 20
+        logic.car["glideBonusY"] = 0.5
+        logic.car["glideBonusZ"] = 0.47
+        logic.car["glideCooldown"] = 28
+        logic.car["glideDur"] = 22
+        logic.car["glideJumpY"] = 0.6
+        logic.car["glideJumpZ"] = 0.4
         logic.car["accelNormal"] = -12
         logic.car["accelTurbo"] = -15
         logic.car["turboDur"] = 16
         logic.car["brakeForce"] = 3.0
         logic.car["steerAmount"] = 0.015
-        logic.car.actuators["Glide"].linV  = [ 0.0, 0.3, 0.25]
         ## Wheel/Handling Stats
         bstat["stiffness"] = 30.0
         bstat["damping"] = 20.0
@@ -234,16 +238,19 @@ def changeShape(choice):
         ## Racer - Wild
         ## Fastest, highest top speed, unstable, longest glide
         logic.scene.objects["Loop 3_proxy"].setVisible(True)
-        logic.car["activeShape"] = 2
-        logic.car.linVelocityMax = 200
-        logic.car["glideBonusY"] = 1
+        logic.car["activeShape"] = 3
+        logic.car.linVelocityMax = 500
         logic.car["accelNormal"] = -15
         logic.car["accelTurbo"] = -28
         logic.car["turboDur"] = 12
         logic.car["brakeForce"] = 10
-        logic.car["glidecooldown"] = 20
+        logic.car["glideBonusY"] = 1
+        logic.car["glideBonusZ"] = 0.43
+        logic.car["glideCooldown"] = 24
+        logic.car["glideDur"] = 18
+        logic.car["glideJumpY"] = 0.5
+        logic.car["glideJumpZ"] = 0.6
         logic.car["steerAmount"] = 0.25
-        logic.car.actuators["Glide"].linV  = [ 0.0, 0.33, 0.33]
         ## Wheel/Handling Stats
         bstat["influence"] = 0.07
         bstat["stiffness"] = 40.0
@@ -254,23 +261,26 @@ def changeShape(choice):
         ## Racer - Tame
         ## Fast, stable yet nimble, long glide
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
-        logic.car["activeShape"] = 3
-        logic.car.linVelocityMax = 120
-        logic.car["glideBonusY"] = 1
-        logic.car["glideBonusZ"] = 0.33
-        logic.car["glidecooldown"] = 14
+        logic.car["activeShape"] = 4
+        logic.car.linVelocityMax = 60
+        logic.car["glideBonusY"] = 0.6
+        logic.car["glideBonusZ"] = 0.44
+        logic.car["glideCooldown"] = 20
+        logic.car["glideDur"] = 12
         logic.car["steerAmount"] = 0.02
         ## Wheel/Handling Stats
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 5:
-        ## Undecided
+        ## Tank
+        ## Trades Glide for a turret, strong, slow turning
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
-        logic.car["activeShape"] = 0
+        logic.car["activeShape"] = 1
     elif choice == 6:
-        ## Undecided
+        ## Mech
+        ## Trades Glide for turret and Turbo for jump, slow, strong, deadly
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
-        logic.car["activeShape"] = 0
+        logic.car["activeShape"] = 1
 
 
 ## Reset max speed after using turbo
@@ -280,7 +290,7 @@ def resetTopSpeed():
     elif logic.car["activeShape"] == 1:
         logic.car.linVelocityMax = 90
     elif logic.car["activeShape"] == 2:
-        logic.car.linVelocityMax = 200
+        logic.car.linVelocityMax = 500
     elif logic.car["activeShape"] == 3:
         logic.car.linVelocityMax = 60
     elif logic.car["activeShape"] == 4:
@@ -299,11 +309,15 @@ def keyHandler():
             logic.car["force"]  = logic.car["accelNormal"]
         ## Turbo
         if key[0] == events.LEFTSHIFTKEY:
-            if logic.car["turboTimer"] < logic.car["turboDur"]:
+            if logic.car["turbo"] == False and logic.car["turboTimer"] > logic.car["turboCooldown"]:
+                logic.car["turbo"] = True
+                logic.car["turboTimer"] = 0
+            if logic.car["turbo"] == True and logic.car["turboTimer"] < logic.car["turboDur"]:
                 logic.car.linVelocityMax += 5
                 logic.car["force"]  = logic.car["accelTurbo"]
             else:
-                resetTopSpeed()
+                logic.car["turbo"] = False
+                resetTopSpeed()                 
         ## Reverse
         elif key[0] == events.SKEY:
             if logic.car["speed"] < 10.0:
@@ -333,11 +347,29 @@ def keyHandler():
             if logic.car["speed"] < 0:
                 ## Braking when going backward
                 logic.car["force"]  = -10
-        ## Maintain momentum and lift when gliding
+        ## Gliding / Turrets
         elif key[0] == events.SPACEKEY:
-            if logic.car["speed"] < 10:
-                logic.car.linearVelocity[1] += logic.car["glideBonusY"]
-                logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
+            if logic.car["activeShape"] <= 4:
+                if logic.car["gliding"] == False and logic.car["glideTimer"] > logic.car["glideCooldown"]:
+                    logic.car["gliding"] = True
+                    logic.car["glideTimer"] = 0
+                    ## Apply upward and forward impulse
+                    for x in range(0, 30):
+                        logic.car.linearVelocity[1] += logic.car["glideJumpY"]
+                        logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
+                elif logic.car["gliding"] == True and logic.car["glideTimer"] < logic.car["glideDur"]:
+                    ## Maintain Glide
+                    logic.car.linearVelocity[1] += logic.car["glideBonusY"]
+                    logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
+                else:
+                    ## We ran out of glide time
+                    logic.car["gliding"] = False    
+            elif logic.car["activeShape"] == 5:
+                ## Allow Tank Turret Movement (NYI)
+                blah = 1
+            elif logic.car["activeShape"] == 6:
+                ## Allow Mech Turret Movement (NYI)
+                blah = 2
         elif key[0] == events.PAD1:
             changeShape(1)
         elif key[0] == events.PAD2:
