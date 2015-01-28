@@ -52,6 +52,59 @@ Running the Game
 See download/README for the most up to date way to run the game!
 
 
+==================
+Playing the Game
+==================
+
+Controls:
+	W = Forward
+	S = Reverse
+	A = Left
+	D = Right
+	Left Control = Brake
+	Left Shift = Turbo
+	Left Shift when in Mech Shape = Jump
+	Spacebar = Glide
+	Spacebar when in Tank or Mech Shape = Rotate Turret (not yet implimented)
+	R = Resue if you flip over
+	
+Mouse:
+	Movement while on the ground = turn left / right
+	Movement while in the air = bank left/right, pitch up/down (a little)
+	Left Button = Ability 1 (not yet implimented)
+	Right Button = Ability 2 (not yet implimented)
+	Middle Button = (not yet implimented)
+	Mouse Wheel = (not yet implimented)
+	
+Change "Shape":
+	Until UI is created...
+	Number Pad 1 through 6 (only 1-4 work atm)
+
+Other Keys:
+	TAB = Toggle Inventory UI (not yet implimented)
+	F = Interact with Puzzles (not yet implimented)
+	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
+	E = Recharge Energy (not yet implimented)
+	Q = (not yet implimented)
+	F1 through F4 = Cameras
+	F12 = Reset Game
+	ESC = Exit Game
+
+
+How to Play:
+	The purpose of the game is to travel around the planet collecting
+	different kinds of energy and using that energy to:
+		1. Power Loop's alternate shapes.
+		2. Power Loop's abilities.
+		3. Solve the fountain puzzles.
+		4. Destroy the Chaoties!
+	Solving the "Fountain Puzzles" will grant you more customization
+	points to adjust the stats of Loop's shapes more to your liking.
+	Also, solving all the puzzles on the six outer sides of the 
+	cube planet will grant you access to the final level. Complete
+	the final level and you win the game! 
+
+
 ========================
 Working on .blend file
 ========================

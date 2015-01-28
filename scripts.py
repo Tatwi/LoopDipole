@@ -30,7 +30,7 @@ General Public Licence v3
 from bge import constraints
 from bge import logic
 from bge import events
-from bge import render
+from bge import render as r
 import math
 
 
@@ -187,8 +187,16 @@ def carHandler():
     
     ## store old values ##
     logic.car["dS"] = S
-    logic.car["SpeedDelta"] = (logic.car["speed"] + 1) / logic.car["dS"]
-
+    
+    ## Cast a Ray to tell if we're still on the ground
+    ray = logic.car.sensors["groundRay"]
+    if ray.positive:
+        logic.car["onGround"] = True
+        ## Show ray when testing
+        #r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
+    else:
+        logic.car["onGround"] = False
+    
 
 ## Set all player shapes invisible
 def makeInvisible():
@@ -250,7 +258,7 @@ def changeShape(choice):
         logic.car["glideDur"] = 18
         logic.car["glideJumpY"] = 0.5
         logic.car["glideJumpZ"] = 0.6
-        logic.car["steerAmount"] = 0.25
+        logic.car["steerAmount"] = 0.125
         ## Wheel/Handling Stats
         bstat["influence"] = 0.07
         bstat["stiffness"] = 40.0
@@ -275,12 +283,14 @@ def changeShape(choice):
         ## Tank
         ## Trades Glide for a turret, strong, slow turning
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
-        logic.car["activeShape"] = 1
+        logic.car["activeShape"] = 5
     elif choice == 6:
         ## Mech
         ## Trades Glide for turret and Turbo for jump, slow, strong, deadly
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
-        logic.car["activeShape"] = 1
+        logic.car["activeShape"] = 6
+        logic.car["mechJumpY"]  = 10.0
+        logic.car["mechJumpZ"]  = 20.0
 
 
 ## Reset max speed after using turbo
@@ -299,6 +309,55 @@ def resetTopSpeed():
         logic.car.linVelocityMax = 60
 
 
+## Turbo
+def turbo():
+    if logic.car["onGround"] == True:
+        ## Foward bonus when driving
+        if logic.car["turbo"] == False and logic.car["turboTimer"] > logic.car["turboCooldown"]:
+            logic.car["turbo"] = True
+            logic.car["turboTimer"] = 0
+        if logic.car["turbo"] == True and logic.car["turboTimer"] < logic.car["turboDur"]:
+            logic.car.linVelocityMax += 5
+            logic.car["force"]  = logic.car["accelTurbo"]
+        else:
+            logic.car["turbo"] = False
+            resetTopSpeed()
+    else:
+        ## Forward bonus when gliding
+        ## Note that topspeed is N/A, because the wheels aren't rolling!
+        if logic.car["turbo"] == False and logic.car["turboTimer"] > logic.car["turboCooldown"]:
+            logic.car["turbo"] = True
+            logic.car["turboTimer"] = 0
+        if logic.car["turbo"] == True and logic.car["turboTimer"] < logic.car["turboDur"]:
+            logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 10
+        else:
+            logic.car["turbo"] = False
+            resetTopSpeed()
+        
+
+
+## Glide
+def glide():
+    if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
+        logic.car["glideTimer"] = 0
+        ## Apply upward and forward impulse
+        for x in range(0, 30):
+            logic.car.linearVelocity[1] += logic.car["glideJumpY"]
+            logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
+    elif logic.car["onGround"] == False:
+        ## Maintain Glide
+        logic.car.linearVelocity[1] += logic.car["glideBonusY"]
+        logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
+        ## Allow gliding as long as you like, but start cooldown upon landing
+        logic.car["glideTimer"] = 0
+        
+## Unlimited Jump for the Mech shape    
+def mechJump():
+    if logic.car["onGround"]:
+        logic.car.linearVelocity[1] += logic.car["mechJumpY"]
+        logic.car.linearVelocity[2] += logic.car["mechJumpZ"]
+
+
 ## called from main car object
 def keyHandler():
     cont = logic.getCurrentController()
@@ -309,15 +368,11 @@ def keyHandler():
             logic.car["force"]  = logic.car["accelNormal"]
         ## Turbo
         if key[0] == events.LEFTSHIFTKEY:
-            if logic.car["turbo"] == False and logic.car["turboTimer"] > logic.car["turboCooldown"]:
-                logic.car["turbo"] = True
-                logic.car["turboTimer"] = 0
-            if logic.car["turbo"] == True and logic.car["turboTimer"] < logic.car["turboDur"]:
-                logic.car.linVelocityMax += 5
-                logic.car["force"]  = logic.car["accelTurbo"]
-            else:
-                logic.car["turbo"] = False
-                resetTopSpeed()                 
+             if logic.car["activeShape"] <= 5:
+                turbo()
+             else:
+                # Do Mech Jump
+                mechJump()
         ## Reverse
         elif key[0] == events.SKEY:
             if logic.car["speed"] < 10.0:
@@ -350,26 +405,13 @@ def keyHandler():
         ## Gliding / Turrets
         elif key[0] == events.SPACEKEY:
             if logic.car["activeShape"] <= 4:
-                if logic.car["gliding"] == False and logic.car["glideTimer"] > logic.car["glideCooldown"]:
-                    logic.car["gliding"] = True
-                    logic.car["glideTimer"] = 0
-                    ## Apply upward and forward impulse
-                    for x in range(0, 30):
-                        logic.car.linearVelocity[1] += logic.car["glideJumpY"]
-                        logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
-                elif logic.car["gliding"] == True and logic.car["glideTimer"] < logic.car["glideDur"]:
-                    ## Maintain Glide
-                    logic.car.linearVelocity[1] += logic.car["glideBonusY"]
-                    logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
-                else:
-                    ## We ran out of glide time
-                    logic.car["gliding"] = False    
+                glide()
             elif logic.car["activeShape"] == 5:
                 ## Allow Tank Turret Movement (NYI)
                 blah = 1
             elif logic.car["activeShape"] == 6:
                 ## Allow Mech Turret Movement (NYI)
-                blah = 2
+                blah = 1
         elif key[0] == events.PAD1:
             changeShape(1)
         elif key[0] == events.PAD2:
@@ -378,6 +420,70 @@ def keyHandler():
             changeShape(3)
         elif key[0] == events.PAD4:
             changeShape(4)
+        elif key[0] == events.PAD5:
+            ## Model not in yet
+            changeShape(5)
+        elif key[0] == events.PAD6:
+            ## Model not in yet
+            changeShape(6)
+
+
+## Mouse Steering
+def mouseMove():
+    cont = logic.getCurrentController()
+    logic.car = cont.owner
+    mouse = cont.sensors["Mouse"]
+
+    ## Set mouse sensitivity
+    sensitivity = 0.07
+
+    h = r.getWindowHeight()//2
+    w = r.getWindowWidth()//2
+    x = (h - mouse.position[0])*sensitivity
+    y = (w - mouse.position[1])*sensitivity
+ 
+    # reset mouse for next frame and keep mouse in the game window
+    r.setMousePosition(h, w)
+    
+    rot = logic.car.localOrientation.to_euler()
+    
+    # Bank / Lean when gliding, but not for Tank and Mech
+    if logic.car["onGround"] == False and logic.car["activeShape"] <= 4:
+        yaw = math.degrees(rot[2]) + x / 6
+        rot[2] = math.radians(yaw)
+        
+        roll = math.degrees(rot[1]) + x * -1
+        rot[1] = math.radians(roll)
+        
+        pitch = math.degrees(rot[0]) + y / 4
+        rot[0] = math.radians(pitch)
+        
+        # Apply rotation
+        logic.car.localOrientation = rot.to_matrix()
+    
+    ## Mouse "dead zone" 0.45 to help moving straight 
+    # Right
+    if x < -0.45:
+        # Turn Wheels
+        logic.car["steer"] -= logic.car["steerAmount"] / 2
+        if logic.car["onGround"] == False:
+            # Vector thrust to move (and stay in the air)
+            logic.car.linearVelocity[0] += logic.car["glideJumpZ"]
+            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 4
+    # Left
+    if x > 0.45:
+        # Turn Wheels
+        logic.car["steer"] += logic.car["steerAmount"] / 2
+        if logic.car["onGround"] == False:
+            # Vector thrust to move (and stay in the air)
+            logic.car.linearVelocity[0] -= logic.car["glideJumpZ"]
+            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 4
+            
+
+    # reset mouse for next frame and keep mouse in the game window
+    r.setMousePosition(h, w)
+
+
 
 
 ## called from shadow lamp
