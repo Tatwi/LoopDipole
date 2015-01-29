@@ -247,9 +247,9 @@ def changeShape(choice):
         ## Fastest, highest top speed, unstable, longest glide
         logic.scene.objects["Loop 3_proxy"].setVisible(True)
         logic.car["activeShape"] = 3
-        logic.car.linVelocityMax = 500
-        logic.car["accelNormal"] = -15
-        logic.car["accelTurbo"] = -28
+        logic.car.linVelocityMax = 400
+        logic.car["accelNormal"] = -18
+        logic.car["accelTurbo"] = -25
         logic.car["turboDur"] = 12
         logic.car["brakeForce"] = 10
         logic.car["glideBonusY"] = 1
@@ -270,12 +270,13 @@ def changeShape(choice):
         ## Fast, stable yet nimble, long glide
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
-        logic.car.linVelocityMax = 60
+        logic.car.linVelocityMax = 70
+        logic.car["turboDur"] = 16
         logic.car["glideBonusY"] = 0.6
-        logic.car["glideBonusZ"] = 0.44
-        logic.car["glideCooldown"] = 20
+        logic.car["glideBonusZ"] = 0.46
+        logic.car["glideCooldown"] = 14
         logic.car["glideDur"] = 12
-        logic.car["steerAmount"] = 0.02
+        logic.car["steerAmount"] = 0.05
         ## Wheel/Handling Stats
         bstat["Stability"] = 0.1
         setWheelStats()
@@ -295,17 +296,17 @@ def changeShape(choice):
 
 ## Reset max speed after using turbo
 def resetTopSpeed():
-    if logic.car["activeShape"] == 0:
+    if logic.car["activeShape"] == 1:
         logic.car.linVelocityMax = 40
-    elif logic.car["activeShape"] == 1:
-        logic.car.linVelocityMax = 90
     elif logic.car["activeShape"] == 2:
-        logic.car.linVelocityMax = 500
+        logic.car.linVelocityMax = 90
     elif logic.car["activeShape"] == 3:
-        logic.car.linVelocityMax = 60
+        logic.car.linVelocityMax = 400
     elif logic.car["activeShape"] == 4:
-        logic.car.linVelocityMax = 60
+        logic.car.linVelocityMax = 70
     elif logic.car["activeShape"] == 5:
+        logic.car.linVelocityMax = 60
+    elif logic.car["activeShape"] == 6:
         logic.car.linVelocityMax = 60
 
 

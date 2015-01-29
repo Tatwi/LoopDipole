@@ -4,3 +4,4 @@
 c705690f5a74cb1a3c1f9481798ea041a68d23c1 9fd22c2195f29c858e06bdd2c929b639b7435450 rob <rbassettjr@tpot.ca> 1422251523 -0500	commit: Added stats per shape, a 4th shape, restructured variables, tuned gliding and handling
 9fd22c2195f29c858e06bdd2c929b639b7435450 d1418c222b19596c09b3f4291d6fe9db3e5fe28b rob <rbassettjr@tpot.ca> 1422396668 -0500	commit: C3 - Fixed bugs in Gliding and Turbo
 d1418c222b19596c09b3f4291d6fe9db3e5fe28b 0f2b6a15ed625ca8ea13900bf22fb8382ff0f0c5 rob <rbassettjr@tpot.ca> 1422430332 -0500	commit: C4 - Mouse Controls, Glide, Turbo working fully on ground and in air, Mech Jump, Ray to tell if on ground.
+0f2b6a15ed625ca8ea13900bf22fb8382ff0f0c5 22a1491ea435ccbddb7db4d773a949613dbd5367 rob <rbassettjr@tpot.ca> 1422559850 -0500	commit: C5 - Added Map Template, tuned values, collision testing

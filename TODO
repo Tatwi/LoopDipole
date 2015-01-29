@@ -19,12 +19,12 @@ TODO - High Level Project Attack Plan
 - Mouse movement for steering left/right. 
 - Handling min/max tuning.
 - First complete character model to determine final feel of movement, camera angles/movement, and scale.
+- Add Turbo, Jump, Brake
 - Test structures, pathways, and scale to make for fun movement.
 -----------------
 
 
 ~~~~~~
-- Add Turbo, Jump, Brake
 - Create primary and secondary abilities.
 - Bind primary ability to Left Mouse Button.
 - Bind secondary ability to Right Mouse Button.
