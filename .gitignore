@@ -1,6 +1,6 @@
 # Always Ignore
 *.blend1*
-*.blend~1
+*.blend~*
 __pycache__/
 previous_versions/
 
