@@ -8,9 +8,21 @@ How To Use This Project!
 File Structure
 ================
 
-loop_dipole_###.blend
-- The current version of the game.
+start.blend
+- Start the game here.
+- Sets active profile in profiles/activeProfile.txt
+- Provides access to settings.
+
+level#.blend
+- Levels 1 through 7.
+- Loads saved user data from the currently active profile.
 - This file depends on files in the asset directory.
+
+scripts.py
+- Logic for player handling.
+
+saveLoad.py
+- Logic for loading and saving persistent user data. 
 
 CREDITS
 - Credits for the project
@@ -43,6 +55,10 @@ download/
 previous_versions/
 - Redundant backups of older game versions. 
 - These are not on GitHub, to save space.
+
+profiles/
+- File names here are self explainitory.
+- Saves the current state of the game so that levels can be spread out over multiple blend files (for performance optimization) and to allow for multiple user profiles.
 
 
 ==================
@@ -87,6 +103,7 @@ Other Keys:
 	E = Recharge Energy (not yet implimented)
 	Q = (not yet implimented)
 	F1 through F4 = Cameras
+	F9 - Save Game
 	F12 = Reset Game
 	ESC = Exit Game
 

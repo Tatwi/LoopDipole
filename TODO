@@ -14,7 +14,7 @@ TODO - High Level Project Attack Plan
 - Ground, skybox textures.
 -----------------
 
-003 - In progress
+003 - Completed
 ~~~~~~
 - Mouse movement for steering left/right. 
 - Handling min/max tuning.
@@ -23,6 +23,12 @@ TODO - High Level Project Attack Plan
 - Test structures, pathways, and scale to make for fun movement.
 -----------------
 
+
+004 - 
+~~~~~~
+- File sturcture and loading.
+- Map templates.
+-----------------
 
 ~~~~~~
 - Create primary and secondary abilities.

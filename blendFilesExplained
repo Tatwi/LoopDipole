@@ -1,0 +1,80 @@
+As things get more complicated, I thought it would be a good idea to explain what is going on in the blend files. For you and for me!
+
+###################
+start.blend
+###################
+- This is the file that gets loaded at the begining of the game. It shows profiles, settings, and start game.
+- At this time, I am just playing around with various concepts to see what I can do and what I like.
+
+
+
+###################
+level#.blend
+###################
+- For the most part all these levels are same. They differ in music, lighting, and other "effects", but logic wise they all function in the same way.
+
+- I use empty objects to hold variables (stats), because it helps to reduce clutter and can make it easier to accomplish some tasks.
+
+Objects:
+
+BaseStats
+    - Empty that holds the handling stats for the player, based on the "vehicle demo" framework.
+    - wheelRadius, wheelBase, wheelFrontoffset, wheelBackoffset, and AttachHeight are never changed.
+    - The other stats are changed to, in part, create the different "shapes" the player can use.
+    
+Collision Box
+    - Prevents the player from falling off the map.
+    
+Controller
+    - Empty that handles global tasks.
+    - Camera selection (keyboard events).
+    - Restarts Game (keyboard event).
+    - Loads music.
+    
+InventoryStats
+    - Empty holding the player's inventory stats.
+    - These variables are changed when picking up and using energy.
+    
+Planet
+    - This is the "floor" of the map. 
+    
+PuzzleStats
+    - Empty holding the current state of the Fountain Puzzles.
+    - These variables are changed when the player or a Chaoty interacts with a Fountain.
+    
+SandBoxSun
+    - Default map-wide lighting.
+    
+Wheel0 - Wheel3
+    - Technically, the player is a car that has 4 wheels. 
+    - Provide the handling interaction with the ground surfaces.
+    - Set to invisible, but can be turned on for testing.
+    
+bare
+    - This the player.
+    audi
+        - Collision box model for the player.
+        - Required as it provides mass.
+        - Set to invisible, but can be turned on for testing.    
+    Loop_#_proxy
+        - Visual player model, linked from assets/models/loop_shapes.blend
+        - Non-collision (REQUIRED!) model for looks only.
+        - These are changed to visible one at a time when the player picks a shape.
+    Sky
+        - Vertex parented sky shpere.
+    cam2
+        - Close and steady third person camera
+    cam3
+        - First person camera (a bit above player so the model shows)
+        
+cam0
+    - "floaty" camera number 1
+
+cam1
+    - "floaty" camera number 2
+
+shadow
+    - Lamp that follows the player and casts his shadow.
+
+target
+    - I'm not sure at the moment... I think this is a left over from the fifth camera I removed... 
