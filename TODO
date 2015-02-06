@@ -24,21 +24,19 @@ TODO - High Level Project Attack Plan
 -----------------
 
 
-004 - 
+004 - Completed
 ~~~~~~
 - File sturcture and loading.
-- Map templates.
+- Save/Load settings and game state in config files for persistence.
+- Map template (full structure, without "stuff"). level1.blend is this template.
 -----------------
 
+
+005 - In Progress
 ~~~~~~
 - Create primary and secondary abilities.
 - Bind primary ability to Left Mouse Button.
 - Bind secondary ability to Right Mouse Button.
------------------
-
-
-~~~~~~
-- Save/Load settings and game state in config files for persistence.
 -----------------
 
 

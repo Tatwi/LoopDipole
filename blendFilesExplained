@@ -1,19 +1,26 @@
-As things get more complicated, I thought it would be a good idea to explain what is going on in the blend files. For you and for me!
+As things get more complicated, I thought it would be a good idea to explain 
+what is going on in the blend files. For you and for me!
 
 ###################
 start.blend
 ###################
-- This is the file that gets loaded at the begining of the game. It shows profiles, settings, and start game.
-- At this time, I am just playing around with various concepts to see what I can do and what I like.
+- This is the file that gets loaded at the begining of the game. It shows 
+profiles, settings, and start game.
+
+- At this time, I am just playing around with various concepts to see what 
+I can do and what I like.
 
 
 
 ###################
 level#.blend
 ###################
-- For the most part all these levels are same. They differ in music, lighting, and other "effects", but logic wise they all function in the same way.
+- For the most part all these levels are same. They differ in music, 
+lighting, geometry, and other "effects", but logic wise they all function 
+in the same way.
 
-- I use empty objects to hold variables (stats), because it helps to reduce clutter and can make it easier to accomplish some tasks.
+- I use empty objects to hold variables (stats), because it helps to 
+reduce clutter and can make it easier to accomplish some tasks.
 
 Objects:
 

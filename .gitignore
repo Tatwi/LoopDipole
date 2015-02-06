@@ -7,6 +7,7 @@ previous_versions/
 # Ignore media creation dirs until I weed out stuff that would be a waste space on GitHub
 assets/graphics/gimp/
 assets/music/sunvox/
+assets/music/audacity/
 assets/sounds/audacity/
 assets/models/blender/
 

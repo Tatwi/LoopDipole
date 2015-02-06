@@ -1,7 +1,14 @@
 '''
+Loop Dipole and the Chaoties
+
+Created by R. Bassett Jr. 
+www.tpot.ca
+
+General Public Licence v3
+
+---------------------
 Save / Load Game Data
 ---------------------
-By: R. Bassett Jr. www.tpot.ca
 
 Save game data in comma seperated values text files
 so it can be shared between different blend files.
