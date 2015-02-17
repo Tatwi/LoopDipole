@@ -76,11 +76,11 @@ def resetStats():
     ## Default Shape
     logic.car["activeShape"] = 1
     
-    logic.car["accelNormal"] = -10.0
-    logic.car["accelTurbo"] = -14.0
+    logic.car["accelNormal"] = -12.0
+    logic.car["accelTurbo"] = -16.0
     logic.car["turboDur"] = 5.0
     logic.car["brakeForce"] = 15.0
-    logic.car["steerAmount"] = 0.1
+    logic.car["steerAmount"] = 0.08
   
     logic.car["glideCooldown"] = 10
     logic.car["glideDur"] = 5
@@ -251,7 +251,7 @@ def changeShape(choice):
         logic.car["accelNormal"] = -18
         logic.car["accelTurbo"] = -25
         logic.car["turboDur"] = 12
-        logic.car["brakeForce"] = 10
+        logic.car["brakeForce"] = 3
         logic.car["glideBonusY"] = 1
         logic.car["glideBonusZ"] = 0.43
         logic.car["glideCooldown"] = 24
@@ -271,6 +271,7 @@ def changeShape(choice):
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
         logic.car.linVelocityMax = 70
+        logic.car["accelNormal"] = -12
         logic.car["turboDur"] = 16
         logic.car["glideBonusY"] = 0.6
         logic.car["glideBonusZ"] = 0.46
@@ -377,7 +378,7 @@ def keyHandler():
         ## Reverse
         elif key[0] == events.SKEY:
             if logic.car["speed"] < 10.0:
-                logic.car["force"]  = 2.0
+                logic.car["force"]  = logic.car["accelNormal"] / 2 * -1
         ## Right
         elif key[0] == events.DKEY:
             logic.car["steer"] -= logic.car["steerAmount"]

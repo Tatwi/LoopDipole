@@ -4,7 +4,7 @@ Loop Dipole and the Chaoties
 Created by R. Bassett Jr.
 www.tpot.ca
 
-Loop Dipole and the Chaoties is a 3D ground effect flying puzzle game that uses Blender 2.71 as its "game engine". Part racing game, part puzzle game, LDC is a single player experience designed to be rewarding, persistent, and just plain fun! 
+Loop Dipole and the Chaoties is a 3D ground effect flying puzzle game that uses Blender 2.73 as its "game engine". Part racing game, part puzzle game, LDC is a single player experience designed to be rewarding, persistent, and just plain fun! 
 
 
 How to Play
