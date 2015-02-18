@@ -1,0 +1,32 @@
+Loop Dipole and the Chaoties
+============================
+Fountain Puzzles
+----------------------------
+Updated 2015.02.17
+R. Bassett Jr. / www.tpot.ca
+----------------------------
+
+Solving Fountain Puzzles, or fountains for short, is the primary goal of the game. The idea is that Loop wants to bring his chaotic world into balance by filling in the holes and tears, which he calls fountains of energy. In order to accomplish this task, he must travel all over the world and collect the right energy type for each stage of the puzzles.
+
+
+- When the player comes in range of a fountain and presses the F Key, the puzzle mini game UI appears. The player is then presented with a repeating pattern of energy shapes, of which he can see one at a time. This pattern will remain the same until the player completes the puzzle or a Chaotie jumps into the fountain and causes the pattern to change. 
+
+- Fountains vary in size, ranging from 3 levels of patterns to 12 levels of patterns.
+
+- Patterns can be made up of 2 to 10 shapes and be between 4 and 40 shapes long. 
+
+- There is some level of randomness to the pattern difficulty of a fountain, but some will definitely be easy while others will be harder. All of the fountains/patterns on the Blue Side, where the player starts the game, will be relatively easy.
+
+- To progress in solving the puzzle, the player must press a number key between 1 and 0 on his keyboard, representing the slots in his toolbar. Pressing the button will toss the corresponding energy shape from Loop into the fountain. 
+
+- Timing and accuracy are the keys to success, as the player's goal is to press the number key that matches the energy shape showing on the pattern. 
+
+- The patterns rate of change will be steady, but each pattern can vary this cadence between 0.5 and 2 seconds. Obviously the faster the shapes change, the harder it will be to press the number buttons at the right time. The player can use the Temporal Lobe ability to slow down this rate of change, making it easier to press the number buttons at the right time.
+
+- When the player is successful, that slot in the pattern changes from empty to full until the pattern is solved or a Chaotie randomizes it. 
+
+- Should a player fail to hit a number button at the correct time, the energy shape leaves toolbar and disappears into the fountain, without affecting the pattern. In other words, the shape is wasted.
+
+- Once a pattern is complete, the energy level of the fountain moves up one notch (level) and a new pattern is started. 
+
+- When the player completes the final level of a fountain, the puzzle UI for that fountain is disabled and a new 3D effect is played to indicate that the fountain is balanced. The player is also rewarded with one Customization Point, except when he completes the fountains on the final level.

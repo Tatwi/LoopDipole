@@ -1,0 +1,66 @@
+Loop Dipole and the Chaoties
+============================
+Character Customization
+----------------------------
+Updated 2015.02.17
+R. Bassett Jr. / www.tpot.ca
+----------------------------
+
+ 
+The player starts the game with access to one shape (which you could call a ship or vehicle), 3 Customization Points, and one preset slot. Over the course of the game the player will unlock an additional:
+
+5 Shapes
+17 Preset Slots
+8 Abilities
+24 Customization Points
+
+Each time a player completes a fountain puzzle they may unlock any shape, ability, or preset slot of their choice and they are granted 1 Customization Point. The exception to this is on the final seventh level of the game, where none of the fountains grant any extras to the player. 
+
+
+Shapes (6 Total)
+----------------
+Loop is an energy being that likes to shape himself and wield his energies in fun and helpful ways. Each shape has different min and max values for the various stats, such movement speed, energy efficiency, etc. They are also visually distinct from each other. 
+
+
+Abilities (8 Total)
+-------------------
+The player may choose to bind any combination of two abilities to his right and his left mouse buttons. These abilities are either weapons, movement altering effects, utilities, or defenses. Abilities fire when their mouse button is pressed. Each ability requires it's own type of energy to be used, which depletes with each use. Ability energy is restored at a nexus or by recharging from the toolbar, provided that the player has picked up the correct energy type. Should the player not have any of the energy that is required for an ability in his inventory, he will not be able to use any preset that uses that ability when he respawns or changes shape. At that point the player can either switch out the offending ability or go out and collect more of that energy type and put it in his inventory.
+
+
+Preset Slots (3 per shape, 18 Total)
+------------------------------------
+Presets are where the player can set up customized configurations of their shapes. Each preset has 2 Ability Slots and 3 Stat Slots. Abilities are chosen from a drop down list from those that are available. Each Stat Slot has a drop down where the player can choose from one of the many stats that make up mechanical differences between the shapes, as well as other stats that make up the world Loop encounters. 
+
+
+Customization Points
+--------------------
+The player starts with 3 of these and eventually earns 27 in total. These points are used, as noted above, to change player selected stats on a shape preset. The player may spend up to 9 CP in each stat slot. This is the same for every preset slot, as presets exist simply as convenient shortcuts to preferred configurations. Each point will modify the stat into the player's favor. On some shapes that may bring a stat simply into the realm of "good enough" when compared to a shape that specializes in that stat or it might make an already specialized shape even more awesome at its intended role. 
+
+
+Energy Types
+-------------
+The player gathers energy from around the planet and uses it to customize his character, power his abilities, and complete fountain puzzles. There are 10 different types of energy: 
+
+-------------------
+Energy Reference
+-------------------
+1 - Triangle
+2 - Star 5 Points
+3 - Circle
+4 - Square
+5 - Heart
+6 - Diamond
+7 - Star 4 Points
+8 - Pentagon
+9 - Rain Drop
+0 - Flower
+--------------------
+
+
+Energy & Stat Mods
+------------------
+Each stat is associated with a type of energy and each point spent on the stat increases the amount of the energy required to use that preset. With inventory limit of 20 of each energy type, the increasing cost of stat boosting forces the player to think carefully about how they want to use their energy. Seeing how it's impossible to use more than 20 points worth of any one given energy, the most a player could max out is two stats that use the same kind of energy (provided that the shape and his equipped abilities don't use more than 2 of that same energy type!). By the time the player reaches the final level, they will have enough customization points to max out all 3 stats in their presets. However, doing so is going to cost them 27 energy every time they change shapes, which some people might find hard to maintain. Such is life! It's all about finding what works for you and making the most of it. :) 
+
+As noted before, if the player is out an energy type required by a stat, he will not be able to use any preset that includes that stat until he refills his inventory with the required engery type. 
+
+This is a simple system that can get complex in a hurry should a person choose to play with it deeply, which I think is great.

@@ -1,0 +1,82 @@
+Loop Dipole and the Chaoties
+============================
+Design Overview
+----------------------------
+Updated 2015.02.17
+R. Bassett Jr. / www.tpot.ca
+----------------------------
+
+
+
+Story Concept:
+--------------
+
+You are a little energy being living on a cube planet drifting through space. You like to take the shape of vehicles and zip around collecting and using the many kinds of chaotic energy that bubble up from your planet. You're not sure where you came from, but you soon discover that your mission in life is to bring all sides of your cube planet into energetic balance. However, it appears that you are not alone - from the billowing chaos that brought you into being froths angry, disorganized energies, nasty little... "Chaoties!" that thrive on chaotic energy and sow chaos wherever they go! Finding, using, and delivering energy to all the chaotic fountains, while defending the the fountains from the crazy Chaoties, will be a monumental task, but you're up for the challenge!
+
+
+
+Game Play Design:
+-----------------
+
+- 3D world with a line drawing inspired rendering style.
+
+- First and third person views.
+
+- Very fast movement similar to a driving game, but with the ability to jump and glide long distances. Gliding requires effort to maintain and control, but with practice one can glide indefinitely. 
+
+- Characters are fairly low polygon models that are essentially "blobs" of coloured energy. The player's character will have nicely defined shapes, while the bad guys will be strange and random.
+
+- There are 7 square maps, each with its own colour and unique layout. The maps are connected with portals at the middle of each side. Loading screens won't be required between maps. These represent the six sides of the cube planet as well as the inside of the cube. While the player always starts on the Blue side of the world, they can go to any side any time they're at a nexus.
+
+- Each side has 4 "fountain puzzles" that spew chaotic energy. The player's goal is to determine what kinds of energy a fountain needs to become balanced and then deliver the energy to the fountain. Once all five fountains on a side become balanced, that side is balanced and complete. The puzzle game play is described in design002 - fountains.txt.
+
+- At the center of each side is a large "nexus" of energy. This nexus is too powerful to control, however Loop has learned to use it to travel from one side the planet to another. While near a nexus, Loop can use his personal energy supply (made of energy in his inventory that he has collected) to take on new shapes. On the final level, the nexus is not located directly in the center of the map.
+
+- Loop has learned to take on six unique "shapes", each with their own characteristics. When the player starts the game he has access to one shape and one preset (presets are simply a handy way to quickly choose your abilities and stat mods when changing shapes). 
+
+- For each fountain puzzle the player completes, he may unlock either a new shape, a preset slot, or an ability. There are 6 shapes, each with 3 presets, and there are 8 abilities, for a total of 24 unlocks to earn (26 - 2, because you start with a shape and a preset already unlocked). 
+
+- Shape presets include stat modifications (such as handling, top speed, acceleration, glide time, and so on) and ability choices. The player can place any of the 8 abilities on either the left mouse button (LMB) or the right mouse button (RMB). He may even use the same ability on both LMB and RMB if he would like. Each preset allows the player to choose 3 stats to modify and each of those stats can be increased by up to 9 Customization Points (CP). These presets cost nothing to be changed and can be changed whenever the player is near a nexus.  
+
+- The player starts with 3 Customization Points (CP) and is granted 1 CP each time he completes a fountain, with the exception of the fountains on the final level. That gives the player 27 CP by the time they can access the final level, which is enough CP to max out all three stats in a preset. Given that presets are just there for convenience, the player gets to use his full amount of earned CP in all of them. 
+
+- Different shapes, stat mods, and abilities require the use of different energy types when Loop changes to them. The player must keep a stock of the required energy in his inventory if he wants to take on a shape, use a stat mod, or use an ability. Any unlocked preset that requires an energy that the player doesn't have in their inventory will be grayed out and the missing requirement will be highlighted. Note that the default shape does not have an energy requirement, but any stat mods and abilities used with it do require energy. Some things will be more expensive than others to use. 
+
+- The player will drive/glide around the planet collecting various kinds of the above noted energy. Physically the energy will take the form of rotating coloured geometric shapes (the colour is just there for appearance, as it would otherwise not be fair to colour blind people). The player may pick up 10 shapes as a time, by passing through them, as indicated in the toolbar. While the shapes are equipped in the toolbar, they correspond to the keyboard numbers 1 through 0. 
+
+- Pressing a number when it occupied by a shape will perform an action depending on where the player is at the time. When at a nexus, the energy will moved to the player's inventory. When at a Fountain, the energy will be tossed into the fountain to solve the puzzle. And when anywhere else, the energy will be dumped/tossed from the toolbar. Energy that has been dumped will decay quickly, causing damage to anything nearby - this is the player's most basic attack/defense ability.
+
+- Loop has 10 Health Points (HP), which is reset to full each time he changes shape at a nexus. Bumping into or being attacked by a Chaotie drop the players health, as will remaining near the player's own dumped energy. Should Loop's last HP be used, the player will lose any energy in their toolbar and they will respawn at the nexus (of the side/map they are currently on). 
+
+- Each shape has its own strengths and weakness. Some shapes will lose less health when they are hurt than others, with Bomber and the Tank being the strongest and the Racer being the weakest.
+
+- Health can only be recharged at a nexus, when changing shape, as it takes a lot of effort and concentration for Loop maintain control over his own energy! :)
+
+- The "Chaoties" are crazy, strange, and sometimes angry energies that will attack the player, eat nearby energy shapes, and throw themselves into fountains. It's the player's job to dissipate the Chaoties before they cause any harm or, at the very least, clean up after they mess up a fountain puzzle. These are the "bad guys" of the game.
+
+- Fountains, as described in "design002 - fountains.txt", are multi stage puzzles. Each stage is a series of shapes, displayed one at a time, and played in a loop. To complete a stage, the player must collect the energy types shown in the loop, then come back and press the shape type when he can see it. For example, if the player has a square in toolbar slot 4, he must press 4 when he sees a square show up in the loop. If timed correctly, that square part is solved. Repeat until all spots are solved to move to the next stage. Repeat until all stages for that fountain are complete. Start the stage (not the whole fountain) over if a Chaotie jumps in there!
+
+- To see what types of energy a fountain needs, the player simply drives up to the fountain and presses the F Key to open the fountain UI. The pattern will then play and it's up to the player to either remember the shapes in the pattern or write them down (this is the game!). 
+
+- Locating the energy types needed is all about learning where the different types of energy "grow" regularly. Again, this is something the player can write down (presumably on a piece of paper). Some shapes will only be found on specific sides of the world, which gives the player incentive to travel all over the world throughout their whole time in the game. Remember, they can go to any side any time they're at a nexus.
+
+- The game is designed to take several hours to beat, depending on how a person chooses to play the game. Focusing on powering through the fountains using the least amount of shape customizations possible will take less time to beat the game, however the overall all purpose of the game is to enjoy the journey. The final level will be hard, not punishing, but certainly something worthy of the effort to get there. Taking your time and learning how to use the different shapes and abilities will have a noticeable impact on how easily the player can complete the final level. 
+
+- The game will save the player's progress, but it will not have multiple save points. Time stops when the game is closed or paused. There are 4 player profiles or "games" the player can choose from, which means up to 4 people can have their own unique level of progress.
+
+- The player may give up on a game and restart it at any time by resetting their profile in the settings page. 
+
+
+
+The Ending
+----------
+
+After completing all 24 fountains on the six sides of the cube planet, Loop will unlock a portal to the center of the planet. Here he will find the seventh and final level of the game! 
+
+The final level consists of one very challenging fountain puzzle in the center, surrounded by four lesser guard fountains (that are optional to complete). Should the player choose to complete a lesser fountain they are rewarded not with extra customizations, but with the fact that those balanced fountains will now zap any Chaoties that come near them, effectively protecting the route to the center fountain. Completing all four will totally block all the Chaoties from messing up Loop's progress on the final fountain. There are going to be a lot of Chaoties on this level, which will make it really hard to finish the main puzzle without first completing the lesser ones, but... the challenge is there for people! The map is also going defy physics and be roughly twice the size of the other maps, just because... you've earned it! :)
+
+After completing the final fountain, Loop does a cheer and the camera pans around to show that Loop has become master of all the energy on planet Cube. The camera then zooms out slowly to reveal that there are other nearby cube planets, with energy traveling between them. As the camera zooms out it fades to a zoomed in picture of my head which slowly zooms out to show me doing something happy and, with a quizzical look on my face, I say, "it's so strange being a being". 
+
+So there's the secret: planet Cube is a neuron in my brain and good little Loop Dipole is one organized thought in a sea of seething chaos!
+
+
