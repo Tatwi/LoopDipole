@@ -487,6 +487,10 @@ def mouseMove():
 
 
 
+## Mouse Button Abilities
+## For performance reasons, these will be done with logic bricks where possible.
+
+
 
 ## called from shadow lamp
 def shadow():

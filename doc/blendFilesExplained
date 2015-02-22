@@ -59,10 +59,13 @@ Wheel0 - Wheel3
     
 bare
     - This the player.
+    Abilities
+        - This is an empty that holds the logic for the player abilities. 
+        - I am working on this as Feb 2015.
     audi
         - Collision box model for the player.
         - Required as it provides mass.
-        - Set to invisible, but can be turned on for testing.    
+        - Set to invisible, but can be turned on for testing.  
     Loop_#_proxy
         - Visual player model, linked from assets/models/loop_shapes.blend
         - Non-collision (REQUIRED!) model for looks only.
