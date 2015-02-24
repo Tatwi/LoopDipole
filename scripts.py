@@ -486,16 +486,12 @@ def mouseMove():
     r.setMousePosition(h, w)
 
 
-
-## Mouse Button Abilities
-## For performance reasons, these will be done with logic bricks where possible.
-
-
+  
 
 ## called from shadow lamp
 def shadow():
-        cont = logic.getCurrentController()
-        ownpos = [-5.0,0.0,8.0]
-        pos = logic.car.worldPosition
-        cont.owner.worldPosition = [pos[0]+ownpos[0], pos[1]+ownpos[1], pos[2]+ownpos[2]]
+    cont = logic.getCurrentController()
+    ownpos = [-5.0,0.0,8.0]
+    pos = logic.car.worldPosition
+    cont.owner.worldPosition = [pos[0]+ownpos[0], pos[1]+ownpos[1], pos[2]+ownpos[2]]
         

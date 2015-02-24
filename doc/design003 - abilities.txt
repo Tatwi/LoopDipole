@@ -18,31 +18,31 @@ Note: The toolbar is filled up by picking up shapes out in the world or by loadi
 Energy Reference
 -------------------
 1 - Triangle
-2 - Star 5 Points
+2 - Five Point Stars
 3 - Circle
 4 - Square
 5 - Heart
 6 - Diamond
-7 - Star 4 Points
+7 - Four Point Stars
 8 - Pentagon
 9 - Rain Drop
 0 - Flower
 --------------------
 
 
-Blastwave
+Block Barrage
 ----------
 Type: Combat
-Energy: Star 5 Points
+Energy: Five Point Stars
 Equip Cost: 3
 Description: 
-Unleashes a wall of energy in front of the player that travels for 2 seconds and destroys anything in it touches, Chaoties and energy alike.
+Fire a wall of 5 blocks that will probably fly forward and most likely destroy any Chaoties they hit. Each block can only destroy 1 Chaotie. Blocks self destruct after 1.5 seconds. May be upgraded 3 times to fire a total of 20 blocks.
 
 
 Lightning
 ---------
 Type: Combat
-Energy: Star 4 Points
+Energy: Four Point Stars
 Equip Cost: 3
 Description: 
 Destroy any Chaotie in a 360 degree bubble around the player.
