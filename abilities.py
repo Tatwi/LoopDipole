@@ -14,14 +14,14 @@ Functions for player abilities
 
 '''
 
-## First, we import all the python module
+## First, we import all the python modules
 from bge import constraints
 from bge import logic
 from bge import events
 from bge import render as r
 import math
 
-#for x in range(0, 3):
+
 
 ## Block Barrage: Throw some blocks ahead.
 def blockBarrage():
@@ -40,20 +40,15 @@ def blockBarrage():
     em5 = logic.scene.objects["Emitter5"]
     em5Acu = em5.actuators["Shoot"]
     
-    # Get the trigger sensor and nest shooting in an if statement to shoot only on press down.
-    fire = cont.sensors["ab1 LMB"]
-    if fire.positive:
-        # Shoot one block per emitter, 3 times
-        for x in range(0, obj["barrage"]):
-            em1Acu.instantAddObject()
-            em2Acu.instantAddObject()
-            em3Acu.instantAddObject()
-            em4Acu.instantAddObject()
-            em5Acu.instantAddObject()
+    # Shoot one block per emitter, X times
+    for x in range(0, obj["barrage"]):
+        em1Acu.instantAddObject()
+        em2Acu.instantAddObject()
+        em3Acu.instantAddObject()
+        em4Acu.instantAddObject()
+        em5Acu.instantAddObject()
 
 
 ## Inertial Reversal: Instantly go in the opposite direction without losing momentum.
-def inertialReversal():
-    cont = logic.getCurrentController()
-    obj = cont.owner
+# Implimented with Logic Bricks
 
