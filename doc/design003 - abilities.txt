@@ -6,13 +6,15 @@ Updated 2015.02.17
 R. Bassett Jr. / www.tpot.ca
 ----------------------------
 
-There are 8 abilities that the player can unlock. He may use up to two abilities at a time, one bound to the LMB and the other bound to the RMB. Each ability requires and uses its own type of energy. Equipping an ability requires x amount of x type of energy be available in the player's inventory. Once equipped, the player may fire that ability up to 8 times before needing to reload. To reload, the player can either changes shapes at a nexus or press the R Key at any time. In order for the R key to work, the player must have the proper type energy in his toolbar. By default, abilities charge at a 1:1 ratio (shots : energy of the right kind in the toolbar), but that can be increased to 4:1 with preset slot stat mods.
+There are 8 abilities that the player can unlock. He may use up to two abilities at a time, one bound to the LMB and the other bound to the RMB. Each ability requires its own type of energy. Equipping an ability requires x amount of x type of energy be available in the player's inventory. Once equipped, the player may fire that ability up to 8 times before needing to reload. To reload, the player can either changes shapes at a nexus or press the R Key at any time. In order for the R key to work, the player must have the proper type energy in his toolbar. Abilities charge at a 1:1 ratio (shots : energy of the right kind in the toolbar).
 
 Abilities do not have cooldowns / reuse timers unless one is specified.
 
-The "default combat ability" is same thing as emptying a toolbar number slot to free up the space. When the player presses a number that has shape in it, the shape will fly out forward for 1 second or until it hits and destroys a Chaotie or another energy shape. If it doesn't hit anything, the shape will explode after 1s of flight, destroying itself and damaging the player if the player is within the blast radius. This works for all shapes.
+The "default combat ability" is same thing as emptying a toolbar number slot to free up the space: When the player presses a toolbar number that has shape in it, Loop will convert the shape into a ball of energy and throw it forward. The ball will fly for about 1 second and then self destruct, unless it hits a Chaotie before then. 
 
 Note: The toolbar is filled up by picking up shapes out in the world or by loading it up from your inventory while you're at a nexus. Your inventory itself is filled up while you're at a nexus, by moving energy from your toolbar into your inventory. You can store up to 20 of each energy type in your inventory.
+
+Damaging Chaoties: These crazy "minions of weird" generally come in sizes of small, medium, and ridiculous. Small ones can be dispatched with a single shot from Loop's abilities, but the larger ones require more effort to defeat. 
 
 -------------------
 Energy Reference
@@ -31,74 +33,72 @@ Energy Reference
 
 
 Block Barrage
-----------
-Type: Combat
-Energy: Five Point Stars
-Equip Cost: 3
+-------------
+Energy: Square
+Equip Cost: 2
 Description: 
-Fire a wall of 5 blocks that will probably fly forward and most likely destroy any Chaoties they hit. Each block can only destroy 1 Chaotie. Blocks self destruct after 1.5 seconds. May be upgraded 3 times to fire a total of 20 blocks.
-
-
-Lightning
----------
-Type: Combat
-Energy: Four Point Stars
-Equip Cost: 3
-Description: 
-Destroy any Chaotie in a 360 degree bubble around the player.
-
-
-Personal Shield
----------------
-Type: Combat
-Energy: Circle
-Equip Cost: 6
-Description:
-Makes the player invincible for 2 seconds. 10s for the Bomber shape, 6s for the Mech shape, 4s for the Tank shape. Cooldown between shots of 10s.
-
-
-Shield Wall
------------
-Type: Combat
-Energy: Pentagon
-Equip Cost: 8
-Description:
-Places a shield around a fountain, destroying the next Chaotie that hits it. Lasts for 2 minutes or until it destroys a Chaotie. Lasts 3 minutes for the default shape.
+Fire a wall of 5 blocks that will probably fly forward and most likely damage or destroy any Chaoties they hit. Blocks are destroyed upon impact with a Chaotie and they self destruct after 1.5 seconds should they not hit a Chaotie. Ability can be upgraded 3 times to fire a total of 20 blocks.
 
 
 
 Inertial Reversal
 -----------------
-Type: Movement
 Energy: Diamond
 Equip Cost: 1
 Description: 
-When used, this ability causes the player to immediately face and begin moving in the opposite direction, without slowing down or turning. 
+When used, this ability causes the player to immediately face and begin moving in the opposite direction, without slowing down or turning. The effect also applies a bit of speed boost when traveling at slower speeds. Works in the air and on the ground.
 
 
-Dodge
------
-Type: Movement
-Energy: Triangle
-Equip Cost: 1
+
+Drop Shield
+-----------
+Energy: Pentagon
+Equip Cost: 8
+Description:
+Places an object on the ground that will destroy the next Chaotie that hits it. May be placed anywhere and the player can place as many as they like. Lasts for 2 minutes or until destroyed by a Chaotie. 
+
+
+
+Ping Pong
+---------
+Energy: Four Point Stars
+Equip Cost: 4
 Description: 
-The player quickly slides a few meters to the right or the left, depending on which mouse button the ability is bound to. Works on the ground and in the air.
+Fires a single projectile that converts one Chaotie into a specific energy type that the player desires. The shape in toolbar slot 1 acts as the guide for this ability. If no shape is in toolbar slot 1 then default seed is square. 
+
+
+
+Phase Modulator
+---------------
+Energy: Circle
+Equip Cost: 6
+Description:
+Makes the player invincible for 2 seconds. Cooldown between shots of 10s. Can be upgraded to 5 seconds. Bomber shape is granted a 5s bonus. 
+
+
+
+Temporal Lobe
+-------------
+Energy: Flower
+Equip Cost: 6
+Description: 
+Slows down the rate of change of a pattern in a fountain puzzle for 10 seconds. Has a 15s cooldown.
 
 
 
 Seeding Machine
 ---------------
-Type: Utility
-Energy: Square
-Equip Cost: 4
+Energy: Triangle
+Equip Cost: 8
 Description: 
-Fires a beam that converts any Chaotie it hits into specific energy types that the player desires. The shape in toolbar slot 1 acts as the guide for this ability. If no shape is in toolbar slot 1 then default seed is square. 
+Casts 5 seeds that will grow into useful shapes when spread over areas volatile (dangerous, health removing) energy. Life span is random per plant, taking between 2 and 5 minutes to reach maturity.
 
 
-Temporal Lobe
--------------
-Type: Utility
-Energy: Flower
-Equip Cost: 6
+
+Field Stabilizer
+----------------
+Energy: Heart
+Equip Cost: 10
 Description: 
-Slows down the rate of change of a pattern in a fountain puzzle for 10 seconds. Has a 15s cooldown.
+Converts one random shape from the toolbar into a bubble of health. 
+
