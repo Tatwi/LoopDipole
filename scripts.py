@@ -1,7 +1,7 @@
 '''
 Loop Dipole and the Chaoties
 
-Created by R. Bassett Jr. 
+Created by R. Bassett Jr.
 www.tpot.ca
 
 General Public Licence v3
@@ -10,7 +10,7 @@ General Public Licence v3
 Player Movement
 ---------------------
 
-The player is based on the "car" from the vehicle physics demo, which has a whack of C++ dedicated 
+The player is based on the "car" from the vehicle physics demo, which has a whack of C++ dedicated
 to simulating vehicle physics. I've modified it to handle how I would like and I have added extra
 functionality, such as jumping, gliding, turbo speed, and mouse controls.
 
@@ -78,19 +78,19 @@ def setWheelStats():
 
 
 # Reset stats when changing shapes
-def resetStats(): 
+def resetStats():
     ## Max/Top Speed
     logic.car.linVelocityMax = 40
-    
+
     ## Default Shape
     logic.car["activeShape"] = 1
-    
+
     logic.car["accelNormal"] = -12.0
     logic.car["accelTurbo"] = -16.0
     logic.car["turboDur"] = 5.0
     logic.car["brakeForce"] = 15.0
     logic.car["steerAmount"] = 0.08
-  
+
     logic.car["glideCooldown"] = 10
     logic.car["glideDur"] = 5
     logic.car["glideBonusY"] = 0.2
@@ -98,7 +98,7 @@ def resetStats():
     ## Lift impulse or "jump"
     logic.car["glideJumpY"] = 0.1
     logic.car["glideJumpZ"] = 0.43
-  
+
     ## Base Stats
     bstat = logic.scene.objects["BaseStats"]
     bstat["influence"] = 0.01
@@ -116,10 +116,10 @@ def carInit():
     cont = logic.getCurrentController()
     logic.scene = logic.getCurrentScene()
     logic.car  = cont.owner
-    
+
     ## Grab base stats from "BaseStats" object
     bstat = logic.scene.objects["BaseStats"]
-    
+
     ## Constants
     wheelRadius = bstat["wheelRadius"]
     wheelBaseWide = bstat["wheelBaseWide"]
@@ -193,10 +193,10 @@ def carHandler():
     ## align car to Z axis to prevent flipping ##
     bstat = logic.scene.objects["BaseStats"]
     logic.car.alignAxisToVect([0.0,0.0,1.0], 2, bstat["Stability"])
-    
+
     ## store old values ##
     logic.car["dS"] = S
-    
+
     ## Cast a Ray to tell if we're still on the ground
     ray = logic.car.sensors["groundRay"]
     if ray.positive:
@@ -205,7 +205,7 @@ def carHandler():
         #r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
     else:
         logic.car["onGround"] = False
-    
+
 
 ## Set all player shapes invisible
 def makeInvisible():
@@ -221,7 +221,7 @@ def makeInvisible():
 def changeShape(choice):
     makeInvisible()
     resetStats()
-    
+
     ## Grab Base Stats to modify them
     bstat = logic.scene.objects["BaseStats"]
 
@@ -344,7 +344,6 @@ def turbo():
         else:
             logic.car["turbo"] = False
             resetTopSpeed()
-        
 
 
 ## Glide
@@ -361,12 +360,31 @@ def glide():
         logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
         ## Allow gliding as long as you like, but start cooldown upon landing
         logic.car["glideTimer"] = 0
-        
-## Unlimited Jump for the Mech shape    
+
+## Unlimited Jump for the Mech shape
 def mechJump():
     if logic.car["onGround"]:
         logic.car.linearVelocity[1] += logic.car["mechJumpY"]
         logic.car.linearVelocity[2] += logic.car["mechJumpZ"]
+
+
+## Flip player over or reset to start position
+def resetPlayer():
+    pos = logic.car.worldPosition
+    if logic.car["rescue"] > 5:
+        # re-orient car (5 second cooldown)
+        logic.car.position = (pos[0], pos[1], pos[2]+3.0)
+        logic.car["rescue"] = -10
+    if pos[2] < -3.0:
+        # return to start position if below lowest level
+        logic.car.position = (0, 0, 8.0)
+        logic.car["rescue"] = -10
+    if logic.car["rescue"] < 0:
+        # right the player
+        logic.car.alignAxisToVect([0.0,0.0,1.0], 2, 1.0)
+        logic.car.setLinearVelocity([0.0,0.0,0.0],1)
+        logic.car.setAngularVelocity([0.0,0.0,0.0],1)
+        logic.car["rescue"] = 0
 
 
 ## called from main car object
@@ -394,17 +412,9 @@ def keyHandler():
         ## Left
         elif key[0] == events.AKEY:
             logic.car["steer"] += logic.car["steerAmount"]
-        ## Rescue Me!
+        ## Reset Player
         elif key[0] == events.RKEY:
-            if key[1] == 1:
-                # re-orient car
-                if logic.car["rescue"] > 2.0:
-                    pos = logic.car.worldPosition
-                    logic.car.position = (pos[0], pos[1], pos[2]+3.0)
-                    logic.car.alignAxisToVect([0.0,0.0,1.0], 2, 1.0)
-                    logic.car.setLinearVelocity([0.0,0.0,0.0],1)
-                    logic.car.setAngularVelocity([0.0,0.0,0.0],1)
-                    logic.car["rescue"] = 0
+                resetPlayer()
         ## Brake
         elif key[0] == events.LEFTCTRLKEY:
             if logic.car["speed"] > 2.0:
@@ -452,27 +462,27 @@ def mouseMove():
     w = r.getWindowWidth()//2
     x = (h - mouse.position[0])*sensitivity
     y = (w - mouse.position[1])*sensitivity
- 
+
     # reset mouse for next frame and keep mouse in the game window
     r.setMousePosition(h, w)
-    
+
     rot = logic.car.localOrientation.to_euler()
-    
+
     # Bank / Lean when gliding, but not for Tank and Mech
     if logic.car["onGround"] == False and logic.car["activeShape"] <= 4:
         yaw = math.degrees(rot[2]) + x / 6
         rot[2] = math.radians(yaw)
-        
+
         roll = math.degrees(rot[1]) + x * -1
         rot[1] = math.radians(roll)
-        
+
         pitch = math.degrees(rot[0]) + y / 4
         rot[0] = math.radians(pitch)
-        
+
         # Apply rotation
         logic.car.localOrientation = rot.to_matrix()
-    
-    ## Mouse "dead zone" 0.45 to help moving straight 
+
+    ## Mouse "dead zone" 0.45 to help moving straight
     # Right
     if x < -0.45:
         # Turn Wheels
@@ -489,7 +499,7 @@ def mouseMove():
             # Vector thrust to move (and stay in the air)
             logic.car.linearVelocity[0] -= logic.car["glideJumpZ"]
             logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 4
-            
+
 
     # reset mouse for next frame and keep mouse in the game window
     r.setMousePosition(h, w)
