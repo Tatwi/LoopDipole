@@ -162,6 +162,33 @@ def carInit():
     setWheelStats()
 
 
+## Cast a Ray to tell if we're still on the ground
+def groundCheck():
+    ray = logic.car.sensors["groundRay"]
+    if ray.positive:
+        logic.car["onGround"] = True
+        ## Show ray when testing
+        #r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
+    else:
+        logic.car["onGround"] = False
+
+## Cast a Ray to tell if we're on the ribbon texture
+## Change movement speed based on shape
+def ribbonCheck():
+    ray = logic.car.sensors["ribbonRay"]
+    if ray.positive:
+        logic.car["speedMult"]  = 1.0
+    # Shape specific modifier when off the ribbons
+    elif logic.car["activeShape"]  == 1:
+        logic.car["speedMult"]  = 0.75
+    elif logic.car["activeShape"]  == 2:
+        logic.car["speedMult"]  = 1.0
+    elif logic.car["activeShape"]  == 5:
+        logic.car["speedMult"]  = 0.05
+    else:
+        logic.car["speedMult"]  = 0.25
+
+
 ## called from main car object
 def carHandler():
     vehicle = constraints.getVehicleConstraint(logic.car["cid"])
@@ -197,14 +224,9 @@ def carHandler():
     ## store old values ##
     logic.car["dS"] = S
 
-    ## Cast a Ray to tell if we're still on the ground
-    ray = logic.car.sensors["groundRay"]
-    if ray.positive:
-        logic.car["onGround"] = True
-        ## Show ray when testing
-        #r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
-    else:
-        logic.car["onGround"] = False
+    ## Checks
+    groundCheck()
+    ribbonCheck()
 
 
 ## Set all player shapes invisible
@@ -226,12 +248,12 @@ def changeShape(choice):
     bstat = logic.scene.objects["BaseStats"]
 
     if choice == 1:
-        ## Basic
-        ## Uses the default stats (Nimble, yet slow and easy to handle)
+        ## Generalist
+        ## Uses the default stats (Nimble, yet slow, easy to handle, hops rather than flies.)
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
     elif choice == 2:
         ## Bomber
-        ## Higher top speed, slow turning, stable, does not take damage
+        ## Higher top speed, slow turning, stable, strong, max speed anywhere.
         logic.scene.objects["Loop 2_proxy"].setVisible(True)
         logic.car["activeShape"] = 2
         logic.car.linVelocityMax = 90
@@ -252,7 +274,7 @@ def changeShape(choice):
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 3:
-        ## Racer - Wild
+        ## Air Racer - Wild
         ## Fastest, highest top speed, unstable, longest glide
         logic.scene.objects["Loop 3_proxy"].setVisible(True)
         logic.car["activeShape"] = 3
@@ -263,7 +285,7 @@ def changeShape(choice):
         logic.car["brakeForce"] = 3
         logic.car["glideBonusY"] = 1
         logic.car["glideBonusZ"] = 0.43
-        logic.car["glideCooldown"] = 24
+        logic.car["glideCooldown"] = 4
         logic.car["glideDur"] = 18
         logic.car["glideJumpY"] = 0.5
         logic.car["glideJumpZ"] = 0.6
@@ -275,7 +297,7 @@ def changeShape(choice):
         bstat["Stability"] = 0.03
         setWheelStats()
     elif choice == 4:
-        ## Racer - Tame
+        ## Air Racer - Tame
         ## Fast, stable yet nimble, long glide
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
@@ -284,7 +306,7 @@ def changeShape(choice):
         logic.car["turboDur"] = 16
         logic.car["glideBonusY"] = 0.6
         logic.car["glideBonusZ"] = 0.46
-        logic.car["glideCooldown"] = 14
+        logic.car["glideCooldown"] = 8
         logic.car["glideDur"] = 12
         logic.car["steerAmount"] = 0.05
         ## Wheel/Handling Stats
@@ -292,12 +314,12 @@ def changeShape(choice):
         setWheelStats()
     elif choice == 5:
         ## Tank
-        ## Trades Glide for a turret, strong, slow turning
+        ## Trades Glide for ability to stick to ribbons, strong, slow.
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
         logic.car["activeShape"] = 5
     elif choice == 6:
-        ## Mech
-        ## Trades Glide for turret and Turbo for jump, slow, strong, deadly
+        ## Race Car
+        ## Trades Glide for ability to stick to ribbons, weak, fast.
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
         logic.car["activeShape"] = 6
         logic.car["mechJumpY"]  = 10.0
@@ -394,7 +416,7 @@ def keyHandler():
     for key in keys:
         ## Forward
         if key[0] == events.WKEY:
-            logic.car["force"]  = logic.car["accelNormal"]
+            logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
         ## Turbo
         if key[0] == events.LEFTSHIFTKEY:
              if logic.car["activeShape"] <= 5:
