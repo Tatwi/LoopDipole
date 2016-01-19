@@ -80,7 +80,7 @@ def setWheelStats():
 # Reset stats when changing shapes
 def resetStats():
     ## Max/Top Speed
-    logic.car.linVelocityMax = 40
+    logic.car.linVelocityMax = 60
 
     ## Default Shape
     logic.car["activeShape"] = 1
@@ -94,7 +94,7 @@ def resetStats():
     logic.car["glideCooldown"] = 10
     logic.car["glideDur"] = 5
     logic.car["glideBonusY"] = 0.2
-    logic.car["glideBonusZ"] = 0.2
+    logic.car["glideBonusZ"] = 0.3
     ## Lift impulse or "jump"
     logic.car["glideJumpY"] = 0.1
     logic.car["glideJumpZ"] = 0.43
@@ -184,9 +184,13 @@ def ribbonCheck():
     elif logic.car["activeShape"]  == 2:
         logic.car["speedMult"]  = 1.0
     elif logic.car["activeShape"]  == 5:
-        logic.car["speedMult"]  = 0.05
-    else:
         logic.car["speedMult"]  = 0.25
+    else:
+        logic.car["speedMult"]  = 0.5
+
+def cornerAssist():
+    pos = logic.car.worldPosition
+    # Will leave this for now...
 
 
 ## called from main car object
@@ -235,6 +239,8 @@ def makeInvisible():
     logic.scene.objects["Loop 2_proxy"].setVisible(False)
     logic.scene.objects["Loop 3_proxy"].setVisible(False)
     logic.scene.objects["Loop 4_proxy"].setVisible(False)
+    logic.scene.objects["Loop 5_proxy"].setVisible(False)
+    logic.scene.objects["Loop 6_proxy"].setVisible(False)
 
 
 ## Change Shapes
@@ -313,23 +319,38 @@ def changeShape(choice):
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 5:
-        ## Tank
-        ## Trades Glide for ability to stick to ribbons, strong, slow.
-        logic.scene.objects["Loop 1_proxy"].setVisible(True)
-        logic.car["activeShape"] = 5
-    elif choice == 6:
         ## Race Car
-        ## Trades Glide for ability to stick to ribbons, weak, fast.
-        logic.scene.objects["Loop 1_proxy"].setVisible(True)
+        ## Trades Glide for ability to stick to ribbons, fast.
+        logic.scene.objects["Loop 5_proxy"].setVisible(True)
+        logic.car["activeShape"] = 5
+        logic.car.linVelocityMax = 400
+        logic.car["accelNormal"] = -18
+        logic.car["accelTurbo"] = -30
+        logic.car["turboDur"] = 4
+        logic.car["brakeForce"] = 8
+        logic.car["steerAmount"] = 0.06
+        ## Wheel/Handling Stats
+        bstat["influence"] = 0.1
+        bstat["damping"] = 20.0
+        bstat["Stability"] = 0.15
+        setWheelStats()
+    elif choice == 6:
+        ## Muscle Car
+        ## Trades Glide for ability to stick to ribbons, strong.
+        logic.scene.objects["Loop 6_proxy"].setVisible(True)
         logic.car["activeShape"] = 6
-        logic.car["mechJumpY"]  = 10.0
-        logic.car["mechJumpZ"]  = 20.0
+        logic.car.linVelocityMax = 90
+        logic.car["accelNormal"] = -12
+        logic.car["accelTurbo"] = -24
+        logic.car["turboDur"] = 8
+        logic.car["brakeForce"] = 8
+        logic.car["steerAmount"] = 0.06
 
 
 ## Reset max speed after using turbo
 def resetTopSpeed():
     if logic.car["activeShape"] == 1:
-        logic.car.linVelocityMax = 40
+        logic.car.linVelocityMax = 60
     elif logic.car["activeShape"] == 2:
         logic.car.linVelocityMax = 90
     elif logic.car["activeShape"] == 3:
@@ -337,9 +358,9 @@ def resetTopSpeed():
     elif logic.car["activeShape"] == 4:
         logic.car.linVelocityMax = 70
     elif logic.car["activeShape"] == 5:
-        logic.car.linVelocityMax = 60
+        logic.car.linVelocityMax = 400
     elif logic.car["activeShape"] == 6:
-        logic.car.linVelocityMax = 60
+        logic.car.linVelocityMax = 90
 
 
 ## Turbo
