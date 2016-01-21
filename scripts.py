@@ -242,6 +242,22 @@ def makeInvisible():
     logic.scene.objects["Loop 5_proxy"].setVisible(False)
     logic.scene.objects["Loop 6_proxy"].setVisible(False)
 
+## Set current shape visible again (when switching from first person camera, etc.)
+def makeVisible():
+    showMe = logic.car["activeShape"]
+    if showMe == 1:
+        logic.scene.objects["Loop 1_proxy"].setVisible(True)
+    elif showMe == 2:
+        logic.scene.objects["Loop 2_proxy"].setVisible(True)
+    elif showMe == 3:
+        logic.scene.objects["Loop 3_proxy"].setVisible(True)
+    elif showMe == 4:
+        logic.scene.objects["Loop 4_proxy"].setVisible(True)
+    elif showMe == 5:
+        logic.scene.objects["Loop 5_proxy"].setVisible(True)
+    elif showMe == 6:
+        logic.scene.objects["Loop 6_proxy"].setVisible(True)
+
 
 ## Change Shapes
 ## Any stat not listed in an if block is set to the default value
@@ -252,6 +268,8 @@ def changeShape(choice):
 
     ## Grab Base Stats to modify them
     bstat = logic.scene.objects["BaseStats"]
+    ## Grab current camera
+    camera = logic.scene.objects["Controller"]
 
     if choice == 1:
         ## Generalist
@@ -345,6 +363,10 @@ def changeShape(choice):
         logic.car["turboDur"] = 8
         logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
+
+    if camera["activeCamera"] == 3:
+        ## First person camera is ON so don't show shape.
+        makeInvisible()
 
 
 ## Reset max speed after using turbo
