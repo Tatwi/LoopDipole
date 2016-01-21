@@ -183,10 +183,10 @@ def ribbonCheck():
         logic.car["speedMult"]  = 0.75
     elif logic.car["activeShape"]  == 2:
         logic.car["speedMult"]  = 1.0
-    elif logic.car["activeShape"]  == 5:
+    elif logic.car["activeShape"]  >= 5:
         logic.car["speedMult"]  = 0.25
     else:
-        logic.car["speedMult"]  = 0.5
+        logic.car["speedMult"]  = 0.66
 
 def cornerAssist():
     pos = logic.car.worldPosition
@@ -255,7 +255,7 @@ def changeShape(choice):
 
     if choice == 1:
         ## Generalist
-        ## Uses the default stats (Nimble, yet slow, easy to handle, hops rather than flies.)
+        ## Uses the default stats (Nimble, easy to handle, short range gliding.)
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
     elif choice == 2:
         ## Bomber
@@ -304,7 +304,7 @@ def changeShape(choice):
         setWheelStats()
     elif choice == 4:
         ## Air Racer - Tame
-        ## Fast, stable yet nimble, long glide
+        ## Stable yet nimble, long glide
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
         logic.car.linVelocityMax = 70
@@ -319,8 +319,8 @@ def changeShape(choice):
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 5:
-        ## Race Car
-        ## Trades Glide for ability to stick to ribbons, fast.
+        ## Stealth Car
+        ## Trades Glide for ability to stick to ribbons, fastest, weak, reduced agro.
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
         logic.car["activeShape"] = 5
         logic.car.linVelocityMax = 400
@@ -341,7 +341,7 @@ def changeShape(choice):
         logic.car["activeShape"] = 6
         logic.car.linVelocityMax = 90
         logic.car["accelNormal"] = -12
-        logic.car["accelTurbo"] = -24
+        logic.car["accelTurbo"] = -20
         logic.car["turboDur"] = 8
         logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
@@ -404,7 +404,7 @@ def glide():
         ## Allow gliding as long as you like, but start cooldown upon landing
         logic.car["glideTimer"] = 0
 
-## Unlimited Jump for the Mech shape
+## Unlimited Jump for the Mech shape (unused)
 def mechJump():
     if logic.car["onGround"]:
         logic.car.linearVelocity[1] += logic.car["mechJumpY"]
@@ -440,15 +440,11 @@ def keyHandler():
             logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
         ## Turbo
         if key[0] == events.LEFTSHIFTKEY:
-             if logic.car["activeShape"] <= 5:
-                turbo()
-             else:
-                # Do Mech Jump
-                mechJump()
+             turbo()
         ## Reverse
         elif key[0] == events.SKEY:
             if logic.car["speed"] < 10.0:
-                logic.car["force"]  = logic.car["accelNormal"] / 2 * -1
+                logic.car["force"]  = logic.car["accelNormal"] / 2 * logic.car["speedMult"] * -1
         ## Right
         elif key[0] == events.DKEY:
             logic.car["steer"] -= logic.car["steerAmount"]
@@ -470,12 +466,10 @@ def keyHandler():
         elif key[0] == events.SPACEKEY:
             if logic.car["activeShape"] <= 4:
                 glide()
-            elif logic.car["activeShape"] == 5:
-                ## Allow Tank Turret Movement (NYI)
+            elif logic.car["activeShape"] >= 5:
+                ## Toggle sticking to the track
                 blah = 1
-            elif logic.car["activeShape"] == 6:
-                ## Allow Mech Turret Movement (NYI)
-                blah = 1
+        ## This section is for testing only. Will be replaced by UI.
         elif key[0] == events.PAD1:
             changeShape(1)
         elif key[0] == events.PAD2:
@@ -485,10 +479,8 @@ def keyHandler():
         elif key[0] == events.PAD4:
             changeShape(4)
         elif key[0] == events.PAD5:
-            ## Model not in yet
             changeShape(5)
         elif key[0] == events.PAD6:
-            ## Model not in yet
             changeShape(6)
 
 
@@ -511,7 +503,7 @@ def mouseMove():
 
     rot = logic.car.localOrientation.to_euler()
 
-    # Bank / Lean when gliding, but not for Tank and Mech
+    # Bank / Lean when gliding, but not for car shapes
     if logic.car["onGround"] == False and logic.car["activeShape"] <= 4:
         yaw = math.degrees(rot[2]) + x / 6
         rot[2] = math.radians(yaw)
