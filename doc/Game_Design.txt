@@ -1,0 +1,259 @@
+Loop Dipole and the Chaoties
+
+Created by R. Bassett Jr.
+www.tpot.ca
+
+General Public Licence v3
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+Updated: 2016.01.22
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+
+
+Mission Statement:
+------------------
+
+Go fast and have fun getting there!
+
+
+Story Concept:
+--------------
+
+You are Loop Dipole, a little energy being living in a mysterious place made of strange energy, somewhere. You like to take the shape of vehicles and zip around collecting and using the many kinds of energy that bubble up around you. You're not sure where you came from, but for some reason you feel compelled to bring order to the chaos around you! However, it appears that you are not alone - from the billowing chaos that brought you into being froths angry, disorganized energies. These nasty little... "Chaoties" thrive on chaotic energy and sow chaos wherever they go! Somehow you know that balancing the fountains of chaotic energy, by solving their perplexing nature, will lead you greatness - if only those Chaoties would stay out your way!
+
+
+Gameplay Overview:
+------------------
+
+The player has two major tasks,
+
+1. Collecting energy.
+- Drive, glide, or fly around the world.
+- Use his different shapes (vehicles) to their or his strengths.
+- Use up stored energy when changing shapes or firing abilities.
+- Destroy Chaoties!
+- Generally explore the ribbons (roads) and playable areas of the world.
+
+2. Solving puzzles.
+- Stored energy is available for use in solving 2D puzzle games.
+- The player drives up to a fountain, presses the F Key and enters puzzle mode.
+- There are different types of puzzles and each has multiple stages.
+- The game world pauses while the player is in puzzle mode.
+- Once a puzzle is solved, it remains solved until the end of the game.
+
+Additionally, the player must decided which puzzles he wants to work on so that he can actively defend it from Chaoties - Chaoties love to jump into puzzles and mess them up!
+
+Each time a Chaotie jumps into a puzzle, the current stage is reset/randomized, undoing the player's progress. This system generates a sort of "meta game" where the player either collects all the energy he needs for a puzzle stage in advance (so he can complete a stage in one go, if possible) or he defends the puzzle while collecting what he needs for the stage.
+
+
+"Games", Saving, and Winning:
+-----------------------------
+
+The game never resets and it doesn't end until the player wins, by completing all the puzzles. Player progress is saved between sessions. Therefore, there isn't any rush to complete the game nor is there any stress caused by the possibility of losing the game - You've never lost, you just haven't finished yet! That said, there will be an option in the settings menu to restart the game if the player wants.
+
+
+Levels/Regions and Ribbons:
+---------------------------
+
+The entire game takes place in a single level, which means that once the game is loaded, the player is free to "go fast and have fun getting there" at their own pace, indefinitely. The (curiously shaped!) world consists of several color coded vertical levels, all hovering above a sea of dangerous chaotic energy (The Sea of Chaos). As the player moves to higher levels, he will encounter more dangers packed into smaller spaces.
+
+To assist the player in getting around, and to offer an alternate style of play, there are roads throughout the world. These "ribbons of energy" have some unique properties that are advantageous to the player.
+
+1. They allow all shapes to reach their maximum ground/driving speed.
+2. Two shapes specialize in traveling on the ribbons.
+3. Flower Energy, which can turn into more rare forms of energy, only spawns on ribbons.
+
+The player will also encounter various hazards and decorations, most of which he will be able to pass through freely. Decor, such as trees, bushes, and structures are constructs of soft energy, thus the player may pass through them without impediment. Enemy structures and areas of nasty energy will physically prevent the player from passing though them, though these are used in moderation (because constantly running into things is the opposite of fun).
+
+While gliding or flying, the player is able afforded a generous amount of space around and above the world for maneuvering. Heading too far afield or too high will cause them the player to slam into an invisible wall. Should the player find themselves lost or stuck down in the chaos, they can respawn at the starting position by hitting CTL+R.
+
+
+Health and Lives:
+-----------------
+
+The player has upto 20 Hit Points (HP), depending on the shape they're using. Touching a Chaotie or being hit by a projectile will remove 1 to 3 HP. Being in dangerous area will remove 1 HP every few seconds. Hit Points automatically regenerate over time. Should the player's HP be reduced to 0, he respawns at the starting position as the default shape with full HP. There isn't a limitation on how many times the player may respawn.
+
+
+Energy Types:
+-------------
+
+While the energy types that the player collects are color coded, they are also coded by physical shape as well, out of consideration to the many colour blind folks of the world. Here is where they can be found:
+
+Red Level:
+- Pentagon (Red)
+
+Orange Level:
+- Circle (Orange)
+
+Yellow Level:
+- Five Point Star (Yellow)
+
+Green Level:
+- Diamond (Green)
+
+Blue Level:
+- Rain Drop (Blue)
+
+Violet Level:
+- Four Point Star (Violet)
+
+Only On Ribbons:
+- Flower (Multi-Coloured)
+
+Randomly Anywhere:
+- Triangle (Silver)
+- Square (Gold)
+- Heart (Pink)
+
+Energy spawns and depsawn randomly throughout the world at all times. Some types are more common than others, remaining in the world longer and being more likely to spawn. When the player picks up an energy or a Chaotie destroys an energy, a new one spawns somewhere else. The spawn density is rewarding without being overwhelming on the player or their computer. Default is 100 shapes, but that can be decreased to 25 or increased to 200 in the settings, to suit the needs of the computer or the player's preference.
+
+Collected energy goes directly into the player's inventory, where it may be used right away. The player's inventory can store up to 30 of each energy type, in all cases except for the Flower. "Flower Power" instead automatically turns into 1 random energy type each time the player collects 10 Flowers.
+
+Hanging out in dangerous areas, such the chaos below the Red Level, will (randomly) deplete the player's stored energy over time. That said, there isn't much reason for the player to be in those areas for long periods of time (or at all, in the case of the chaotic region).
+
+
+Player Shapes:
+--------------
+
+Loop knows how to transform himself in to six unique shapes, each with its own strengths and weaknesses. The player is welcome to use whichever shape he likes, whenever he would like, provided he has required energy available in his inventory.
+
+Legend:
+SC - Shape Cost, how much energy is required to change into that form.
+HP - Hit Points
+LMB} / RMB} - Left/Right Mouse Button
+Abilities: Button} Description (Energy type used - 1 per shot)
+
+1. Glider (Default)
+- SC: None
+- HP: 12
+- Good speed and handling on and off ribbons.
+- Very short glide, extended while using turbo in the air.
+- Modest turbo and top speed.
+- LMB} Shoots a barrage of blocks (Random Energy).
+- RMB} Instantly reverses direction (Pentagon).
+
+2. Bomber
+- SC: 25 Pentagons
+- HP: 20 (Strongest)
+- Goes its max speed everywhere.
+- Turns very slowly on the ground (making it to use on ribbons).
+- Maintains flight with little effort.
+- Easy to fly for long periods.
+- LMB} Drops bombs that turn Chaoties into collectible energy (Square).
+- RMB} Converts stored energy into HP (Flower).
+
+3. Air Racer - Wild
+- SC: 10 Triangles, 10 Squares, 5 Hearts
+- HP: 7 (Weakest)
+- Very fast everywhere, but quite unstable.
+- Extremely fast turbo in the air.
+- Short cooldown on gliding.
+- LMB} Shoots a barrage of blocks (Circle).
+- RMB} Instantly reverses direction (Pentagon).
+
+4. Air Racer - Tame
+- SC: 20 Raindrops, 5 Hearts
+- HP: 12
+- Good speed and stable handling.
+- Maintains flight with modest effort.
+- No direct offensive weapon abilities.
+- LMB} Drops mines that last 5 min and explode on proximity (Five Point Star).
+- RMB} Seeding Machine, launch a seed into an area of chaos to grow up to 5 random energy (Heart).
+
+5. Car - Stealth
+- SC: 20 Four Point Stars, 5 Squares
+- HP: 8 (Weak)
+- Very fast and stable on ribbons.
+- Extremely slow off the ribbons.
+- Unable to glide or jump.
+- Can turn on driving assist to help it stay on the ribbons.
+- Short, yet powerful turbo with a long cooldown.
+- LMB} Shoots laser bolts (Rain Drop).
+- RMB} Becomes invisible to Chaoties for 5 seconds. (Four Point Star).
+
+6. Car - Muscle
+- SC: 10 Five Point Stars, 10 Rain Drops, 5 Hearts
+- HP: 14
+- Fast and stable on ribbons.
+- Slow off the ribbons, but turbo makes it managable.
+- Unable to glide or jump.
+- Can turn on driving assist to help it stay on the ribbons.
+- Long, yet modest turbo with a short cooldown.
+- LMB} Smash into a Chaotie within 5 seconds and collect some energy! (Orange).
+- RMB} Instantly reverses direction (Pentagon).
+
+
+Chaoties and other Dangers:
+---------------------------
+
+The Chaoties are "bad guys" who wander around the world doing chaotic things such as, creating dangerous structures, jumping into energy fountains (messing up the player's puzzles), and generally giving Loop a hard time. There are four basic types of Chaoties:
+
+1. Squatters - They sit on ribbons being as unhelpful as possible.
+
+2. Chasers - These flying nasties will follow Loop until they either catch him or they despawn.
+
+3. Roamers - They path around randomly doing random stuff.
+
+4. Builders - Give these industrious behemoths a wide birth, as they like to place dangerous structures and crush you. The only Chaotie that will take a few shots or explosions to destroy.
+
+Builders construct one of 4 types of structures, at a rate of roughly 1 per minute during their approximately 5 minute life time. Structures are indestructible for the 5 or so minutes they're around. The structures are:
+
+1. Laser Towers - Will fire lasers the player when in range.
+
+2. Mud Puddles - Slows the player to a crawl, damaging over time.
+
+3. Minion Maker - Spawns many miniature, short lived chasers.
+
+4. Void of Chaos - An almost invisible portal to... nowhere good!
+
+The player may also want avoid the other more predictable dangers of the world, such as the Sea of Chaos, puddles of chaos, and energy storms.
+
+
+Fountain Puzzles:
+-----------------
+
+Scattered around the world, the player will find 20 fountains of wild energy just begging to be studied and tamed. These are the puzzles the player must solve to win the game. Each puzzle has between 3 to 10 stages, with each stage consisting of one of 4 puzzle games. Stages varying difficulty, from easy to challenging. When the player starts a new game, the puzzles are randomized so as to create a unique experience each game. That said, it can take many hours to "beat the game" and the point of playing really is to enjoy the journey.
+
+To start working on a puzzle, the player simply approaches the fountain and presses the F Key. This brings up a 2D user interface, where the player plays the puzzle game. While in puzzle mode, the rest of the game is paused.
+
+The four games that make up the content puzzle are:
+
+Common Rules:
+- Each shape consistently corresponds to a number key, 1 through 0.
+- The player must press number keys to fill the slots.
+- Conditions or game type of a stage will be randomized if a Chaotie jumps into the fountain, otherwise the stage state is saved and static between game sessions.
+
+1. "Pattern Punch"
+- Concept by R. Bassett Jr.
+- A series of empty shape slots ticks by.
+- Each shape corresponds to a number key.
+- Harder puzzles have more empty slots and tick by at a faster rate.
+
+2. "Chain of Command"
+- Concept by R. Bassett Jr.
+- Build strands of energy by filling the missing pieces.
+- Click [?], press a number key.
+- Looks like strands of DNA with missing parts.
+- Each missing section has a fully built example in some part of the picture.
+
+3. "Semidoku"
+- Based on Sudoku.
+- Place shapes in the correct locations of the arrays.
+- Click [?], press a number key.
+- Games have 4 boxes of 4 shapes, with the shapes chosen randomly.
+- Each stage can have 1 to 4 games.
+- Hard games start with 6 boxes filled.
+- Easy games start with 9 boxes filled
+
+4. "Connect More"
+- Based on Connect 4.
+- Take turns against the chaos trying to string some of the same shape together!
+- String must be 4 OR 5 OR 6 long to win.
+- Computer wins with any 5 in a row or by stymieing the player.
+- When player loses, board resets, but the win conditions remain the same.
+- Diagonals, up/down, and side/side count.
+- 4 Win: Must be the randomly chosen shape.
+- 5 Win: Must be any of 2 other randomly chosen shapes.
+- 6 Win: Can be any shape type.
+- Board Grids: Easy 12x12, Medium 10x10, Hard 8x8.
+- Click a row, press number key to drop a shape.
+

@@ -1,0 +1,83 @@
+Loop Dipole and the Chaoties
+
+Created by R. Bassett Jr.
+www.tpot.ca
+
+General Public Licence v3
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+Updated: 2016.01.21
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+
+
+How to Play
+===========
+
+Requirements:
+    Linux, Windows, MacOS
+	Blender 2.69
+	Video Card: AMD 5670 / Nvidia GTS450 or better
+    CPU: Dual Core 1.8GHz AMD / Intel or better
+
+Recomended:
+    The game was built using...
+    Operating System: 64Bit Linux (PCLinuxOS / Linux Mint 17 / Debian 7)
+    Video Card: AMD R9 270 (Roughly the same as an Nvidia GTX750)
+    CPU: AMD FX-8320 (8 Cores at 4GHz - Roughly the same as a 3GHz Intel i5)
+
+
+Running the Game:
+    NOTE: Eventually I will make a handy installer so the game runs like any other game in Linux and Windows. Until then, do this:
+    1. Download/Install Blender 2.69. Please note that some things only work in Blender version 2.69, so use it.
+        https://www.blender.org/features/past-releases/2-69/
+    2. Download and unzip the game.
+        https://github.com/Tatwi/LoopDipole
+    3. Launch Blender.
+    4. Open level1.blend.
+    5. In the lower right area, under the "Standalone Player" heading, choose your resolution/options, and hit "Start".
+
+
+Game Play:
+	The purpose of the game is to travel around the planet collecting
+	different kinds of energy and using that energy to:
+		1. Power Loop's alternate shapes.
+		2. Power Loop's abilities.
+		3. Solve the fountain puzzles.
+		4. Destroy the Chaoties!
+	Solve all the "Fountain Puzzles" to win the game!
+
+
+Controls:
+	W = Forward
+	S = Reverse
+	A = Left
+	D = Right
+	Left Control = Brake
+	Left Shift = Turbo
+	Spacebar = Glide
+	R = Resue if you flip over
+
+
+Mouse:
+	Movement while on the ground = turn left / right
+	Movement while in the air = bank left/right, pitch up/down (a little, but enough to stay in the air with practice)
+	Left Button = Ability 1
+	Right Button = Ability 2
+	Middle Button = (not yet implimented)
+	Mouse Wheel = (not yet implimented)
+
+
+Change "Shape":
+	Until UI is created...
+	Number Pad 1 through 6
+
+
+Other Keys:
+	TAB = Toggle Inventory UI (not yet implimented)
+	F = Interact with Puzzles (not yet implimented)
+	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
+	E = Recharge Energy (not yet implimented)
+	Q = (not yet implimented)
+	F1 through F4 = Cameras
+	F9 = Save Game
+	F12 = Reset Game (without saving current data)
+	ESC = Exit Game (without saving current data, until UI is completed)

@@ -1,0 +1,116 @@
+Loop Dipole and the Chaoties
+
+Created by R. Bassett Jr.
+www.tpot.ca
+
+General Public Licence v3
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+Updated: 2016.01.21
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+
+As things get more complicated, I thought it would be a good idea to explain
+what is going on in the blend files. For you and for me!
+
+IMPORTANT: All blend files reference/use/REQUIRE external files.
+
+###################
+start.blend
+###################
+- This is the file that gets loaded at the begining of the game. It shows
+profiles, settings, and starts game.
+
+- As of Jan 2016, all it does is load the game (and isn't needed to do so).
+
+
+###################
+level1.blend
+###################
+- The main level of the game, hosting objects and logic bricks.
+
+- I use empty objects to hold variables, logic and to organize objects, because it helps to
+reduce clutter and can make it easier to accomplish some tasks.
+
+
+Objects:
+
+BaseStats
+    - Empty that holds the handling stats for the player, based on the "vehicle demo" framework.
+    - wheelRadius, wheelBase, wheelFrontoffset, wheelBackoffset, and AttachHeight are never changed.
+    - The other stats are changed to, in part, create the different "shapes" the player can use.
+
+BorderBox
+    - Prevents the player from falling off the map.
+
+ColourParts
+    - Empty holding the lined platforms/floors that make up the level.
+
+Controller
+    - Empty that handles global tasks.
+    - Camera selection (keyboard events).
+    - Restarts Game (keyboard event).
+    - Loads music, UI, etc.
+
+InventoryStats
+    - Empty holding the player's inventory stats.
+    - These variables are changed when picking up and using energy.
+
+Projectile
+    - Cube used as a pojectile for shooting stuff.
+    - Mostly for testing at this point.
+
+PuzzleStats
+    - Empty holding the current state of the Fountain Puzzles.
+    - These variables are changed when the player or a Chaoty interacts with a Fountain.
+
+Ribbons
+    - Empty holding the template ribbons (roads) as well the fully built roadways.
+
+SandBoxSun
+    - Default map-wide lighting.
+
+Target
+    - Cylinder to shoot at while testing.
+
+Target Spawn
+    - The place at which the test cylinders emerge from the void!
+
+Wheel0 - Wheel3
+    - Technically, the player is a car that has 4 wheels.
+    - Provide the handling interaction with the ground surfaces.
+    - Set to invisible, but can be turned on for testing.
+
+bare
+    - This the player.
+    Abilities
+        - This is an empty that holds the logic for the player abilities.
+        - I am working on this as Feb 2015.
+    audi
+        - Collision box model for the player.
+        - Required as it provides mass.
+        - Set to invisible, but can be turned on for testing.
+    Loop_#_proxy
+        - Visual player model, linked from assets/models/loop_shapes.blend
+        - Non-collision (REQUIRED!) model for looks only.
+        - These are changed to visible one at a time when the player picks a shape.
+    Sky
+        - Vertex parented sky shpere.
+    cam2
+        - Close and steady third person camera
+    cam3
+        - First person camera (a bit above player so the model shows)
+
+cam0
+    - "floaty" camera number 1
+
+cam1
+    - "floaty" camera number 2
+
+target
+    - I'm not sure at the moment... I think this is a left over from the fifth camera I removed...
+
+
+###################
+assets/models/loop_shapes.blend
+###################
+    - Linked library file for the character shapes.
+    - I made each shape in its own scene.

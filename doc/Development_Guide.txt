@@ -1,0 +1,146 @@
+Loop Dipole and the Chaoties
+
+Created by R. Bassett Jr.
+www.tpot.ca
+
+General Public Licence v3
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+Updated: 2016.01.21
+- ~ - ~ - ~ - ~ - ~ - ~ - ~
+
+This document is a general overview of how I have broken the development of the game into chunks and the order in which I am most likely to complete them. I feel it's important in a huge undertaking such as making a game to focus my efforts, as much as possible, on completing one thing before moving on to the next. However, there is a practical limit to such compartmentalization, due to how various parts of the game depend on each other. Sometimes you just need to go ahead and make some blocks to shoot, so you can tell that moving around shooting stuff feels right!
+
+[Complete] Initial configuration
+-----------------
+- Repurpose the vehicle_controller_demo blend file
+- WASD FPS style keyboard layout
+-----------------
+
+[Complete] Blend File Organization and Testing Config
+-----------------
+- Level/Scene pattern that will be used for all 7 levels.
+- First character model ("shape").
+- Ground, skybox textures.
+-----------------
+
+[Complete] Movement
+-----------------
+- Mouse movement for steering left/right.
+- Handling min/max tuning.
+- First complete character model to determine final feel of movement, camera angles/movement, and scale.
+- Add Turbo, Jump, Brake
+- Test structures, pathways, and scale to make for fun movement.
+- Program ability to determine when on ground or on a ribbon.
+-----------------
+
+[Complete] Camera Modes
+-----------------
+- Implement 3 third person views and one first person view.
+-----------------
+
+[Complete] File Structure and Data Storage/Loading
+-----------------
+- File structure and loading.
+- Save/Load settings and game state in config files for persistence.
+-----------------
+
+[Complete] Player Shapes
+-----------------
+- Create six 3D models, one for each shape.
+- Program the ability to switch between shapes.
+- Program/test unique handling properties for each shape.
+- Design primary and secondary abilities and assign them to each shape.
+- Align cameras to shapes.
+- Hide shape when in first person view.
+-----------------
+
+[In Progress] Level Layout
+-----------------
+- Design and build the base world layout.
+- Build ribbons (roadways).
+- Add areas of chaos and storms.
+- Program speed difference between travel on ribbons and ground.
+- Test movement around this space.
+- QA world for collision issues, leaks, etc.
+- Finalize world textures.
+-----------------
+
+[Begun] Player Abilities
+-----------------
+- Create primary and secondary abilities.
+- Bind primary ability to Left Mouse Button.
+- Bind secondary ability to Right Mouse Button.
+- Tie active abilities to shape changing.
+- Program player hit points.
+-----------------
+
+UI In Game
+-----------------
+- Display hit points.
+- Display stored energy values.
+- Display turbo and glide status.
+- Display active abilities.
+- Create shape changing UI (TAB key).
+- Create basic mini-map, with ON/OFF toggle.
+-----------------
+
+Energy System
+-----------------
+- Add model templates.
+- Create spawn location database file.
+- Program spawn/destruction/collection logic.
+- Tie ability use to stored energy.
+- Program loss of energy over time when in areas of chaos.
+- Thoroughly test player inventory persistence!
+-----------------
+
+Enemies
+-----------------
+- Make 4 enemy character and structure models.
+- Program spawning/destruction logic.
+- Program character and structure behavior.
+-----------------
+
+Sounds
+-----------------
+- Remake intro song!
+- Create/Add ambient sounds for world, player, and enemies.
+- Create/Add sounds for player and enemies abilities.
+- Decide if a sound track is worth making.
+-----------------
+
+Particle System
+-----------------
+- Test addon particle system vs. hand made particles.
+- Add particles to abilities, fountains, characters, and decor.
+-----------------
+
+Puzzle Games
+-----------------
+- Switching between game types, pausing 3D world while in puzzle mode.
+- Program each of the four game types.
+- Implement UI for each game type.
+- Program game win conditions.
+-----------------
+
+Decorations
+-----------------
+- Create low poly, low resource decorative items, such as trees, bushes, and other solid looking structures.
+- Create particle type decorations.
+- Place static decor.
+- Spawn random decor.
+- All of this stuff is ultimately inconsequential (no collision for players or Chaoties) and can be disabled in the settings menu.
+-----------------
+
+UI Settings Menu
+-----------------
+- Loading screen with profile selection.
+- Settings menu with graphics options and preferences.
+-----------------
+
+Packaging EXE
+-----------------
+- Package zip file for Linux.
+- Create RPM and deb installers for Linux Mint, PCLinuxOS, and Ubuntu.
+- Create installer for Windows.
+-----------------
