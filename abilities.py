@@ -1,7 +1,7 @@
 '''
 Loop Dipole and the Chaoties
 
-Created by R. Bassett Jr. 
+Created by R. Bassett Jr.
 www.tpot.ca
 
 General Public Licence v3
@@ -27,7 +27,7 @@ import math
 def blockBarrage():
     cont = logic.getCurrentController()
     obj = cont.owner
-    
+
     # Get all the emitter actuators
     em1 = logic.scene.objects["Emitter1"]
     em1Acu = em1.actuators["Shoot"]
@@ -39,7 +39,7 @@ def blockBarrage():
     em4Acu = em4.actuators["Shoot"]
     em5 = logic.scene.objects["Emitter5"]
     em5Acu = em5.actuators["Shoot"]
-    
+
     # Shoot one block per emitter, X times
     for x in range(0, obj["barrage"]):
         em1Acu.instantAddObject()
@@ -49,6 +49,27 @@ def blockBarrage():
         em5Acu.instantAddObject()
 
 
-## Inertial Reversal: Instantly go in the opposite direction without losing momentum.
+# Inertial Reversal: Instantly go in the opposite direction without losing momentum.
 # Implimented with Logic Bricks
+
+
+# Collection Vortex (unfinished)
+# Enlage Collector
+def largeCollector():
+    cont = logic.getCurrentController()
+    owner = cont.owner
+
+    owner.localScale.x = 2
+    owner.localScale.z = 5
+    owner.localPosition.z = 1
+    owner["colTimer"] = 0
+
+# Reset Collector
+def normalCollector():
+    cont = logic.getCurrentController()
+    owner = cont.owner
+
+    owner.localScale.x = 1
+    owner.localScale.z = 1
+    owner.localPosition.z = owner["homePos"]
 

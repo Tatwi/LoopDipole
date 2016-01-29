@@ -77,23 +77,25 @@ def setWheelStats():
     vehicle.setTyreFriction(bstat["friction"],3)
 
 
-#  Set default shape values (Green glider shape)
+#  Reset stats when changing shapes
 def resetStats():
     # Max/Top Speed
     logic.car.linVelocityMax = 60
 
     # Default Shape
     logic.car["activeShape"] = 1
+
     logic.car["accelNormal"] = -12.0
     logic.car["accelTurbo"] = -16.0
     logic.car["turboDur"] = 7.0
     logic.car["turboCooldown"] = 10.0
-    logic.car["brakeForce"] = 10.0
+    logic.car["brakeForce"] = 15.0
     logic.car["steerAmount"] = 0.08
-    logic.car["glideCooldown"] = 30
+
+    logic.car["glideCooldown"] = 10
     logic.car["glideDur"] = 5
     logic.car["glideBonusY"] = 0.2
-    logic.car["glideBonusZ"] = 0.38
+    logic.car["glideBonusZ"] = 0.3
     # Lift impulse or "jump"
     logic.car["glideJumpY"] = 0.1
     logic.car["glideJumpZ"] = 0.43
@@ -106,11 +108,6 @@ def resetStats():
     bstat["compression"] = 4.0
     bstat["friction"] = 10.0
     bstat["Stability"] = 0.1
-
-    # Abilities
-    abilities = logic.scene.objects["Abilities"]
-    abilities["abilityLMB"] = 1
-    abilities["abilityRMB"] = 1
 
 
 # This is called from the object named "bare"
@@ -182,79 +179,39 @@ def groundCheck():
 # Change movement speed based on shape
 def ribbonCheck():
     ray = logic.car.sensors["ribbonRay"]
-
     if logic.car["onGround"] == True:
         if ray.positive:
-            logic.car["onRibbon"] = True
-
+            logic.car["speedMult"]  = 1.0
             # Show ray when testing
-            #from bge import render as r
-            #r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
+            from bge import render as r
+            r.drawLine(logic.car.worldPosition, ray.hitPosition, [1,0,0])
+        #  Shape specific modifier when off the ribbons
+        elif logic.car["activeShape"]  == 1:
+            logic.car["speedMult"]  = 0.75
+        elif logic.car["activeShape"]  == 2:
+            logic.car["speedMult"]  = 1.0
+        elif logic.car["activeShape"]  >= 5:
+            logic.car["speedMult"]  = 0.25
         else:
-            logic.car["onRibbon"] = False
-
-
-#  Shape specific modifier when off the ribbons
-def applyRibbonSpeedMod():
-    if logic.car["onGround"] == True:
-        if logic.car["onRibbon"] == False:
-            if logic.car["activeShape"]  == 1:
-                logic.car["speedMult"]  = 0.75
-            elif logic.car["activeShape"]  == 2:
-                logic.car["speedMult"]  = 1.0
-            elif logic.car["activeShape"]  >= 5:
-                logic.car["speedMult"]  = 0.25
-            else:
-                logic.car["speedMult"]  = 0.5
-        elif logic.car["onRibbon"] == True:
-            logic.car["speedMult"]  = 1
-
-
-# Reset max speed after using turbo
-def resetTopSpeed():
-    if logic.car["activeShape"] == 1:
-        logic.car.linVelocityMax = 60
-    elif logic.car["activeShape"] == 2:
-        logic.car.linVelocityMax = 160
-    elif logic.car["activeShape"] == 3:
-        logic.car.linVelocityMax = 200
-    elif logic.car["activeShape"] == 4:
-        logic.car.linVelocityMax = 140
-    elif logic.car["activeShape"] == 5:
-        logic.car.linVelocityMax = 120
-    elif logic.car["activeShape"] == 6:
-        logic.car.linVelocityMax = 90
+            logic.car["speedMult"]  = 0.5
 
 
 # Set Turbo status
 def turboStatus():
-
-    # Check/set the status
-    if G.turboActive == True:
-        logic.car["turboCoolTimer"] = 0
-        if logic.car["turboDurTimer"] > logic.car["turboDur"]:
-            G.turboActive = False
-            logic.car["turboCoolTimer"] = 0
-            G.turboCooldown = True
-            resetTopSpeed()
-    elif G.turboCooldown == True:
-        logic.car["turboDurTimer"] = 0
-        if logic.car["turboCoolTimer"] > logic.car["turboCooldown"]:
-            G.turboCooldown = False
+    if logic.car["turboTimer"] > logic.car["turboCooldown"] and G.turboCooldown == False:
+        G.turboReady = True
     else:
-         logic.car["turboCoolTimer"] = 0
-         logic.car["turboDurTimer"] = 0
+        G.turboReady = False
+        G.turboCooldown = True
+        G.turboCount = int(logic.car["turboCooldown"] - logic.car["turboTimer"])
 
-    # Send timer data to global variables for UI
-    G.turboDurTimerUI = str(int(logic.car["turboDur"] - logic.car["turboDurTimer"]))
-    G.turboCoolTimerUI = str(int(logic.car["turboCooldown"] - logic.car["turboCoolTimer"]))
+    if G.turboActive == True and G.turboReady == False:
+        G.turboCount = int(logic.car["turboDur"] - logic.car["turboTimer"])
 
 
-def glideStatus():
-    # Send timer data to global variable for UI
-    G.glideCooldownTimer = logic.car["glideTimer"]
-    G.glideCooldown = logic.car["glideCooldown"]
-    G.activeShape = logic.car["activeShape"]
+def cornerAssist():
+    pos = logic.car.worldPosition
+    #  Will leave this for now...
 
 
 # called from main car object
@@ -266,15 +223,19 @@ def carHandler():
     logic.car["speed"] = (S - logic.car["dS"])*10.0
 
     # calculate world velocity, which is also valid while in the air
-    Xspeed, Yspeed, Zspeed = logic.car.getLinearVelocity(True)
-    linSum = Xspeed + Yspeed
+    Xspeed, Yspeed, Zspeed = logic.car.getLinearVelocity(False)
+    linSum = Xspeed + Yspeed + Zspeed
     G.mySpeed = linSum
 
+    # hard limit velocity on the ground AND in the air every frame
+    if abs(linSum) > logic.car.linVelocityMax:
+        logic.car.linearVelocity[1] = logic.car.linVelocityMax - 4
+
     # apply engine force
-    vehicle.applyEngineForce(logic.car["force"]*10,0)
-    vehicle.applyEngineForce(logic.car["force"]*10,1)
-    vehicle.applyEngineForce(logic.car["force"]*10,2)
-    vehicle.applyEngineForce(logic.car["force"]*10,3)
+    vehicle.applyEngineForce(logic.car["force"],0)
+    vehicle.applyEngineForce(logic.car["force"],1)
+    vehicle.applyEngineForce(logic.car["force"],2)
+    vehicle.applyEngineForce(logic.car["force"],3)
 
     # calculate steering with varying sensitivity
     if math.fabs(logic.car["speed"])<15.0: s = 2.0
@@ -296,14 +257,11 @@ def carHandler():
 
     # store old values
     logic.car["dS"] = S
-    logic.car["dlinSum"] = linSum
 
     # Checks
     groundCheck()
     ribbonCheck()
-    applyRibbonSpeedMod()
     turboStatus()
-    glideStatus()
 
 
 # Set all player shapes invisible
@@ -341,26 +299,22 @@ def changeShape(choice):
 
     # Grab Base Stats to modify them
     bstat = logic.scene.objects["BaseStats"]
-    # Grab abilities
-    abilities = logic.scene.objects["Abilities"]
     # Grab current camera
     camera = logic.scene.objects["Controller"]
 
     if choice == 1:
-        # Glider
+        # Generalist
         # Uses the default stats (Nimble, easy to handle, short range gliding.)
         logic.scene.objects["Loop 1_proxy"].setVisible(True)
     elif choice == 2:
         # Bomber
         # Higher top speed, slow turning, stable, strong, max speed anywhere.
-        abilities["abilityLMB"] = 1
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 2_proxy"].setVisible(True)
         logic.car["activeShape"] = 2
-        logic.car.linVelocityMax = 160
+        logic.car.linVelocityMax = 140
         logic.car["glideBonusY"] = 0.5
-        logic.car["glideBonusZ"] = 0.42
-        logic.car["glideCooldown"] = 20
+        logic.car["glideBonusZ"] = 0.47
+        logic.car["glideCooldown"] = 28
         logic.car["glideDur"] = 22.0
         logic.car["glideJumpY"] = 0.6
         logic.car["glideJumpZ"] = 0.4
@@ -375,24 +329,22 @@ def changeShape(choice):
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 3:
-        # Air Racer
+        # Air Racer - Wild
         # Fastest, highest top speed, unstable, longest glide
-        abilities["abilityLMB"] = 2
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 3_proxy"].setVisible(True)
         logic.car["activeShape"] = 3
-        logic.car.linVelocityMax = 200
+        logic.car.linVelocityMax = 180
         logic.car["accelNormal"] = -18
         logic.car["accelTurbo"] = -25
         logic.car["turboDur"] = 8.0
         logic.car["turboCooldown"] = 8.0
         logic.car["brakeForce"] = 3
         logic.car["glideBonusY"] = 1
-        logic.car["glideBonusZ"] = 0.41
+        logic.car["glideBonusZ"] = 0.43
         logic.car["glideCooldown"] = 4
         logic.car["glideDur"] = 18
         logic.car["glideJumpY"] = 0.5
-        logic.car["glideJumpZ"] = 0.4
+        logic.car["glideJumpZ"] = 0.6
         logic.car["steerAmount"] = 0.125
         # Wheel/Handling Stats
         bstat["influence"] = 0.07
@@ -401,90 +353,96 @@ def changeShape(choice):
         bstat["Stability"] = 0.03
         setWheelStats()
     elif choice == 4:
-        # Strategic Fighter Jet
+        # Air Racer - Tame
         # Stable yet nimble, long glide
-        abilities["abilityLMB"] = 1
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
-        logic.car.linVelocityMax = 140
+        logic.car.linVelocityMax = 70
         logic.car["accelNormal"] = -12
         logic.car["turboDur"] = 16.0
         logic.car["turboCooldown"] = 18.0
-        logic.car["glideBonusY"] = 0.8
-        logic.car["glideBonusZ"] = 0.43
-        logic.car["glideCooldown"] = 15
+        logic.car["glideBonusY"] = 0.6
+        logic.car["glideBonusZ"] = 0.46
+        logic.car["glideCooldown"] = 8
         logic.car["glideDur"] = 12
-        logic.car["steerAmount"] = 0.075
+        logic.car["steerAmount"] = 0.05
         # Wheel/Handling Stats
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 5:
-        # Scifimobile
+        # Stealth Car
         # Trades Glide for ability to stick to ribbons, fastest, weak, reduced agro.
-        abilities["abilityLMB"] = 1
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
         logic.car["activeShape"] = 5
         logic.car.linVelocityMax = 120
-        logic.car["accelNormal"] = -22
+        logic.car["accelNormal"] = -18
         logic.car["accelTurbo"] = -30
         logic.car["turboDur"] = 5
         logic.car["turboCooldown"] = 20.0
-        logic.car["brakeForce"] = 2
+        logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
         # Wheel/Handling Stats
-        bstat["influence"] = 0.01
-        bstat["stiffness"] = 40.0
-        bstat["Stability"] = 0.14
+        bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 6:
         # Muscle Car
         # Trades Glide for ability to stick to ribbons, strong.
-        abilities["abilityLMB"] = 1
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 6_proxy"].setVisible(True)
         logic.car["activeShape"] = 6
         logic.car.linVelocityMax = 90
-        logic.car["accelNormal"] = -16
+        logic.car["accelNormal"] = -12
         logic.car["accelTurbo"] = -20
         logic.car["turboDur"] = 12
         logic.car["turboCooldown"] = 10.0
         logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
         # Wheel/Handling Stats
-        bstat["stiffness"] = 30
-        bstat["Stability"] = 0.12
+        bstat["Stability"] = 0.1
         setWheelStats()
 
     if camera["activeCamera"] == 3:
         # First person camera is ON so don't show shape.
         makeInvisible()
 
-# Apply Turbo motion
-def applyTurbo():
-    if logic.car["onGround"] == True:
-        logic.car.linVelocityMax += 5
-        logic.car["force"]  = logic.car["accelTurbo"]
-    else:
-        logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
 
-# Handle Turbo key press
-def pressedTurbo():
-    if G.turboCooldown == True:
-        return
+# Reset max speed after using turbo
+def resetTopSpeed():
+    if logic.car["activeShape"] == 1:
+        logic.car.linVelocityMax = 60
+    elif logic.car["activeShape"] == 2:
+        logic.car.linVelocityMax = 120
+    elif logic.car["activeShape"] == 3:
+        logic.car.linVelocityMax = 180
+    elif logic.car["activeShape"] == 4:
+        logic.car.linVelocityMax = 70
+    elif logic.car["activeShape"] == 5:
+        logic.car.linVelocityMax = 120
+    elif logic.car["activeShape"] == 6:
+        logic.car.linVelocityMax = 90
 
-    if G.turboActive == True:
-        applyTurbo()
-    else:
+# Turbo
+def turbo():
+    # Check if we can turbo and start turboing
+    if G.turboReady == True:
         G.turboActive = True
-        logic.car["turboDurTimer"] = 0
-        applyTurbo()
+        logic.car["turboTimer"] = 0
+        G.turboReady == False
+
+    # Apply the turbo
+    if G.turboActive == True and logic.car["turboTimer"] < logic.car["turboDur"]:
+        if logic.car["onGround"] == True:
+            logic.car.linVelocityMax += 5
+            logic.car["force"]  = logic.car["accelTurbo"]
+        else:
+            logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
+    else:
+        G.turboActive = False
+        G.turboCooldown = True
+        resetTopSpeed()
 
 
-# Gliding/flying for aircraft shapes
-# Glide timer is kept at 0 while the player is holding spacebar down and is in the air
-def airGlide():
+# Glide
+def glide():
     if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
         logic.car["glideTimer"] = 0
         # Apply upward and forward impulse
@@ -493,24 +451,16 @@ def airGlide():
             logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
     elif logic.car["onGround"] == False:
         # Maintain Glide
-        logic.car.linearVelocity[1] += logic.car["glideBonusY"] * 2
-        logic.car.linearVelocity[2] += logic.car["glideBonusZ"] * 2
+        logic.car.linearVelocity[1] += logic.car["glideBonusY"]
+        logic.car.linearVelocity[2] += logic.car["glideBonusZ"]
         # Allow gliding as long as you like, but start cooldown upon landing
         logic.car["glideTimer"] = 0
 
-
-# Glding to help car shapes stick to the ribbons
-# Glide timer is kept at 0 while the player is holding spacebar down and is on a ribbon
-def groundGlide():
-    if logic.car["onRibbon"] == True:
-        if logic.car["glideTimer"] > logic.car["glideCooldown"]:
-            # Turn on glide mode
-            logic.car["glideTimer"] = 0
-        elif logic.car["glideTimer"] < 0.05:
-            happy = "put the glide per frame stuff here..."
-            # Allow gliding as long as you like, but start cooldown upon leaving a ribbon or releasing spacebar
-            logic.car["glideTimer"] = 0
-
+# Unlimited Jump for the Mech shape (unused)
+def mechJump():
+    if logic.car["onGround"]:
+        logic.car.linearVelocity[1] += logic.car["mechJumpY"]
+        logic.car.linearVelocity[2] += logic.car["mechJumpZ"]
 
 
 # Flip player over or reset to start position
@@ -542,7 +492,7 @@ def keyHandler():
             logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
         # Turbo
         if key[0] == events.LEFTSHIFTKEY:
-             pressedTurbo()
+             turbo()
         # Reverse
         elif key[0] == events.SKEY:
             if logic.car["speed"] < 10.0:
@@ -567,9 +517,10 @@ def keyHandler():
         # Gliding / Turrets
         elif key[0] == events.SPACEKEY:
             if logic.car["activeShape"] <= 4:
-                airGlide()
+                glide()
             elif logic.car["activeShape"] >= 5:
-                groundGlide()
+                # Toggle sticking to the track
+                blah = 1
         # This section is for testing only. Will be replaced by UI.
         elif key[0] == events.PAD1:
             changeShape(1)
@@ -626,7 +577,7 @@ def mouseMove():
         if logic.car["onGround"] == False:
             #  Vector thrust to move (and stay in the air)
             logic.car.linearVelocity[0] += logic.car["glideJumpZ"]
-            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 3
+            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 4
     #  Left
     if x > 0.45:
         #  Turn Wheels
@@ -634,7 +585,7 @@ def mouseMove():
         if logic.car["onGround"] == False:
             #  Vector thrust to move (and stay in the air)
             logic.car.linearVelocity[0] -= logic.car["glideJumpZ"]
-            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 3
+            logic.car.linearVelocity[2] += logic.car["glideBonusZ"] / 4
 
 
     #  reset mouse for next frame and keep mouse in the game window

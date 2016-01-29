@@ -134,52 +134,55 @@ Abilities: Button} Description (Energy type used - 1 per shot)
 2. Bomber
 - SC: 25 Pentagons
 - HP: 20 (Strongest)
+- Gliding is self maintained in level flight.
 - Goes its max speed everywhere.
 - Turns very slowly on the ground (making it to use on ribbons).
-- Maintains flight with little effort.
 - Easy to fly for long periods.
 - LMB} Drops bombs that turn Chaoties into collectible energy (Square).
 - RMB} Converts stored energy into HP (Flower).
 
-3. Air Racer - Wild
+3. Air Racer
 - SC: 10 Triangles, 10 Squares, 5 Hearts
 - HP: 7 (Weakest)
-- Very fast everywhere, but quite unstable.
-- Extremely fast turbo in the air.
+- Gliding is self maintained in level flight.
+- Very fast everywhere, but quite unstable on the ground.
+- Extremely fast turbo, especially in the air.
 - Short cooldown on gliding.
-- LMB} Shoots a barrage of blocks (Circle).
+- No offensive weapon abilities.
+- LMB} Create a vortex behind you that collects energy as you pass by. (Circle).
 - RMB} Instantly reverses direction (Pentagon).
 
-4. Air Racer - Tame
+4. Strategic Fighter Jet
 - SC: 20 Raindrops, 5 Hearts
 - HP: 12
+- Gliding is self maintained in level flight and will slowly gain altitude.
 - Good speed and stable handling.
 - Maintains flight with modest effort.
 - No direct offensive weapon abilities.
-- LMB} Drops mines that last 5 min and explode on proximity (Five Point Star).
+- LMB} Drops mines behind that last 5 min and explode on proximity to Chaoties (Five Point Star).
 - RMB} Seeding Machine, launch a seed into an area of chaos to grow up to 5 random energy (Heart).
 
-5. Car - Stealth
+5. Scifimobile
 - SC: 20 Four Point Stars, 5 Squares
 - HP: 8 (Weak)
-- Very fast and stable on ribbons.
-- Extremely slow off the ribbons.
+- Extremely fast and stable on ribbons.
+- Slow off the ribbons.
 - Unable to glide or jump.
-- Can turn on driving assist to help it stay on the ribbons.
+- Glide button turns on driving assist to help it stay on the ribbons.
 - Short, yet powerful turbo with a long cooldown.
 - LMB} Shoots laser bolts (Rain Drop).
-- RMB} Becomes invisible to Chaoties for 5 seconds. (Four Point Star).
+- RMB} Instantly reverses direction (Four Point Star).
 
-6. Car - Muscle
+6. Muscle Car
 - SC: 10 Five Point Stars, 10 Rain Drops, 5 Hearts
 - HP: 14
-- Fast and stable on ribbons.
+- Fast, stable, and strong.
 - Slow off the ribbons, but turbo makes it managable.
 - Unable to glide or jump.
-- Can turn on driving assist to help it stay on the ribbons.
+- Glide button turns on driving assist to help it stay on the ribbons.
 - Long, yet modest turbo with a short cooldown.
-- LMB} Smash into a Chaotie within 5 seconds and collect some energy! (Orange).
-- RMB} Instantly reverses direction (Pentagon).
+- LMB} Smash into and destroy any Chaoties within 5 seconds to collect some energy (Orange).
+- RMB} Pump up the tunes to create three sonic booms that destroy any Chaotie in a large radius (Pentagon).
 
 
 Chaoties and other Dangers:
