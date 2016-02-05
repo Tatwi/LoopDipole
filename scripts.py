@@ -498,6 +498,13 @@ def airGlide():
         # Allow gliding as long as you like, but start cooldown upon landing
         logic.car["glideTimer"] = 0
 
+# Move navigation mesh
+def moveMesh():
+    cont = logic.getCurrentController()
+    logic.scene = logic.getCurrentScene()
+    navMesh = logic.scene.objects["RailNav180"]
+    navMesh.worldPosition = cont.owner.worldPosition
+    navMesh.worldOrientation = cont.owner.worldOrientation
 
 # Glding to help car shapes stick to the ribbons
 # Glide timer is kept at 0 while the player is holding spacebar down and is on a ribbon
