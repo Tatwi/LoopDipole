@@ -501,10 +501,15 @@ def airGlide():
 # Move navigation mesh
 def moveMesh():
     cont = logic.getCurrentController()
-    logic.scene = logic.getCurrentScene()
+    if cont.owner["wrongDirection"] > 3:
+        logic.scene = logic.getCurrentScene()
+        navMesh = logic.scene.objects["RailNav180"]
+        navMesh.worldPosition = cont.owner.worldPosition
+        navMesh.worldOrientation = cont.owner.worldOrientation
+
+def moveMeshHome():
     navMesh = logic.scene.objects["RailNav180"]
-    navMesh.worldPosition = cont.owner.worldPosition
-    navMesh.worldOrientation = cont.owner.worldOrientation
+    navMesh.position = (0, 0, -200.0)
 
 # Glding to help car shapes stick to the ribbons
 # Glide timer is kept at 0 while the player is holding spacebar down and is on a ribbon
