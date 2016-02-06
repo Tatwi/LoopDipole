@@ -54,14 +54,21 @@ This document is a general overview of how I have broken the development of the 
 - Hide shape when in first person view.
 -----------------
 
-[In Progress] Level Layout
+[Complete] World Layout and Movement
 -----------------
 - Design and build the base world layout.
-- Build ribbons (roadways).
-- Add areas of chaos and storms.
 - Program speed difference between travel on ribbons and ground.
+- Program Gliding (Corner Assist) mode for non-flight shapes 5 & 6.
 - Test movement around this space.
-- QA world for collision issues, leaks, etc.
+- QA world for collision issues, normals, etc.
+-----------------
+
+[Begun] Build the World!
+-----------------
+- Build ribbons (roadways).
+- Add areas of chaos (water), hills, mountains.
+- Add 20 different fountain puzzle structures.
+- Add a few decorative structures for testing scale.
 - Finalize world textures.
 -----------------
 

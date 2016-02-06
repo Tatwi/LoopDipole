@@ -168,7 +168,7 @@ Abilities: Button} Description (Energy type used - 1 per shot)
 - Extremely fast and stable on ribbons.
 - Slow off the ribbons.
 - Unable to glide or jump.
-- Glide button turns on driving assist to help it stay on the ribbons.
+- Glide button turns on driving assist to automatically guide the player around many 90 and 180 degree bends in the ribbons.
 - Short, yet powerful turbo with a long cooldown.
 - LMB} Shoots laser bolts (Rain Drop).
 - RMB} Instantly reverses direction (Four Point Star).
@@ -179,7 +179,7 @@ Abilities: Button} Description (Energy type used - 1 per shot)
 - Fast, stable, and strong.
 - Slow off the ribbons, but turbo makes it managable.
 - Unable to glide or jump.
-- Glide button turns on driving assist to help it stay on the ribbons.
+- Glide button turns on driving assist to automatically guide the player around many 90 and 180 degree bends in the ribbons.
 - Long, yet modest turbo with a short cooldown.
 - LMB} Smash into and destroy any Chaoties within 5 seconds to collect some energy (Orange).
 - RMB} Pump up the tunes to create three sonic booms that destroy any Chaotie in a large radius (Pentagon).

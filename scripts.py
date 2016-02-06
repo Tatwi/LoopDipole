@@ -527,8 +527,8 @@ def cornerTriggerVisibility(state):
         if 'CornerTrigger' in o:
             o.setVisible(state)
 
-# Move navigation mesh to glide around corner, but only for shapes 5 and 6.
-def moveNavMesh(meshName):
+# Move the navigation mesh and trigger group into position
+def moveNavMesh(meshName, startTrigger):
     if logic.car["activeShape"] > 4:
         if logic.car["onRibbon"] == True and logic.car["cornerAssist"] == True:
             cont = logic.getCurrentController()
@@ -538,22 +538,60 @@ def moveNavMesh(meshName):
             # timer gets set to 0 when approaching a corner assist trigger from the wrong direction
             # (when player collides with a CornerTriggerWrongDirection object), thereby preventing this
             # function from spawning an unwanted nav mesh/trigger that would send the player back the way they came.
-            if timer["timer"] > 1:
+            if timer["timer"] > 0.5:
+                trigger = logic.scene.objects[startTrigger]
+                trigger["ready"] = True
                 navMesh = logic.scene.objects[meshName]
                 navMesh.worldPosition = cont.owner.worldPosition
                 navMesh.worldOrientation = cont.owner.worldOrientation
 
-# Called by the trigger object on collision with player
+# Called by the RailNav___Start objects on collision with player
 def moveNavMesh180R():
-    moveNavMesh("RailNav180Right")
+    moveNavMesh("RailNav180Right", "180GoRightStart")
 
-# Called by destination object on collision with player
+def moveNavMesh180L():
+    moveNavMesh("RailNav180Left", "180GoLeftStart")
+
+def moveNavMesh90R():
+    moveNavMesh("RailNav90Right", "90GoRightStart")
+
+def moveNavMesh90L():
+    moveNavMesh("RailNav90Left", "90GoLeftStart")
+
+# Turn off the pathing effect
+# Called by RailNav___End objects on collision with player
+def goOff():
+    logic.scene = logic.getCurrentScene()
+    right90 = logic.scene.objects["90GoRightStart"]
+    left90 = logic.scene.objects["90GoLeftStart"]
+    right180 = logic.scene.objects["180GoRightStart"]
+    left180 = logic.scene.objects["180GoLeftStart"]
+
+    right90["go"] = False
+    left90["go"] = False
+    right180["go"] = False
+    left180["go"] = False
+
+# Move the navigation mesh and trigger group back under the world
+# Called by the RailNav___Mover objects on collision with the player
 def moveNavMeshHome():
     cont = logic.getCurrentController()
     myParent = cont.owner["myParent"]
     navMesh = logic.scene.objects[myParent]
-    navMesh.position = (0, 0, -200.0)
-    cont.owner["endActive"] = False
+
+    logic.scene = logic.getCurrentScene()
+    right90 = logic.scene.objects["90GoRightStart"]
+    left90 = logic.scene.objects["90GoLeftStart"]
+    right180 = logic.scene.objects["180GoRightStart"]
+    left180 = logic.scene.objects["180GoLeftStart"]
+
+    #Turn off pathing trigger to avoid hitting the player with it while moving it (super important!)
+    right90["ready"] = False
+    left90["ready"] = False
+    right180["ready"] = False
+    left180["ready"] = False
+
+    navMesh.worldPosition = (0, 0, -200)
 
 
 ######

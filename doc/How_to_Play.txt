@@ -56,6 +56,11 @@ Controls:
 	Spacebar = Glide
 	R = Resue if you flip over
 
+Gliding:
+    Shapes 1 - 4, hold Spacebar to maintain glide.
+    Shape 1 purposely has a limited gliding range.
+    Shapes 5 & 6, Spacebar toggles ON/OFF corner assist mode, which auto-drives around many corners.
+
 
 Mouse:
 	Movement while on the ground = turn left / right
@@ -75,9 +80,8 @@ Other Keys:
 	TAB = Toggle Inventory UI (not yet implimented)
 	F = Interact with Puzzles (not yet implimented)
 	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
-	E = Recharge Energy (not yet implimented)
-	Q = (not yet implimented)
 	F1 through F4 = Cameras
-	F9 = Save Game
+	F5 = Spawn some testing targets to push around and shoot at.
+	F9 = Save Game (nothing to really save at the moment though)
 	F12 = Reset Game (without saving current data)
 	ESC = Exit Game (without saving current data, until UI is completed)
