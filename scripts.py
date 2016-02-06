@@ -228,7 +228,6 @@ def resetTopSpeed():
 
 # Set Turbo status
 def turboStatus():
-
     # Check/set the status
     if G.turboActive == True:
         logic.car["turboCoolTimer"] = 0
@@ -255,6 +254,7 @@ def glideStatus():
     G.glideCooldownTimer = logic.car["glideTimer"]
     G.glideCooldown = logic.car["glideCooldown"]
     G.activeShape = logic.car["activeShape"]
+    G.cornerAssist = logic.car["cornerAssist"]
 
 
 # called from main car object
@@ -338,6 +338,8 @@ def makeVisible():
 def changeShape(choice):
     makeInvisible()
     resetStats()
+    cornerTriggerVisibility(False)
+    logic.car["cornerAssist"] = False
 
     # Grab Base Stats to modify them
     bstat = logic.scene.objects["BaseStats"]
@@ -431,6 +433,7 @@ def changeShape(choice):
         logic.car["accelTurbo"] = -30
         logic.car["turboDur"] = 5
         logic.car["turboCooldown"] = 20.0
+        logic.car["glideCooldown"] = 2.0
         logic.car["brakeForce"] = 2
         logic.car["steerAmount"] = 0.06
         # Wheel/Handling Stats
@@ -450,6 +453,7 @@ def changeShape(choice):
         logic.car["accelTurbo"] = -20
         logic.car["turboDur"] = 12
         logic.car["turboCooldown"] = 10.0
+        logic.car["glideCooldown"] = 2.0
         logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
         # Wheel/Handling Stats
@@ -498,31 +502,63 @@ def airGlide():
         # Allow gliding as long as you like, but start cooldown upon landing
         logic.car["glideTimer"] = 0
 
-# Move navigation mesh
-def moveMesh():
-    cont = logic.getCurrentController()
-    if cont.owner["wrongDirection"] > 3:
-        logic.scene = logic.getCurrentScene()
-        navMesh = logic.scene.objects["RailNav180"]
-        navMesh.worldPosition = cont.owner.worldPosition
-        navMesh.worldOrientation = cont.owner.worldOrientation
 
-def moveMeshHome():
-    navMesh = logic.scene.objects["RailNav180"]
-    navMesh.position = (0, 0, -200.0)
+########
+# BEGIN Gliding (Corner Assist) for Shapes 4 and 5
+########
+# The two car shapes can't fly, instead they can turn on corner assist mode
+# which automatically sucks them around 90 and 180 degree turns.
 
-# Glding to help car shapes stick to the ribbons
-# Glide timer is kept at 0 while the player is holding spacebar down and is on a ribbon
+# Toggle ON/OFF state (once in 1 second)
 def groundGlide():
-    if logic.car["onRibbon"] == True:
-        if logic.car["glideTimer"] > logic.car["glideCooldown"]:
-            # Turn on glide mode
-            logic.car["glideTimer"] = 0
-        elif logic.car["glideTimer"] < 0.05:
-            happy = "put the glide per frame stuff here..."
-            # Allow gliding as long as you like, but start cooldown upon leaving a ribbon or releasing spacebar
-            logic.car["glideTimer"] = 0
+    logic.scene = logic.getCurrentScene()
+    timer = logic.scene.objects["Controller"]
+    if timer["timer"] > 1:
+        timer["timer"] = 0
+        if logic.car["cornerAssist"] == False:
+            logic.car["cornerAssist"] = True
+            cornerTriggerVisibility(True)
+        elif logic.car["cornerAssist"] == True:
+            logic.car["cornerAssist"] = False
+            cornerTriggerVisibility(False)
 
+def cornerTriggerVisibility(state):
+    for o in logic.scene.objects:
+        if 'CornerTrigger' in o:
+            o.setVisible(state)
+
+# Move navigation mesh to glide around corner, but only for shapes 5 and 6.
+def moveNavMesh(meshName):
+    if logic.car["activeShape"] > 4:
+        if logic.car["onRibbon"] == True and logic.car["cornerAssist"] == True:
+            cont = logic.getCurrentController()
+            logic.scene = logic.getCurrentScene()
+            timer = logic.scene.objects["Controller"]
+
+            # timer gets set to 0 when approaching a corner assist trigger from the wrong direction
+            # (when player collides with a CornerTriggerWrongDirection object), thereby preventing this
+            # function from spawning an unwanted nav mesh/trigger that would send the player back the way they came.
+            if timer["timer"] > 1:
+                navMesh = logic.scene.objects[meshName]
+                navMesh.worldPosition = cont.owner.worldPosition
+                navMesh.worldOrientation = cont.owner.worldOrientation
+
+# Called by the trigger object on collision with player
+def moveNavMesh180R():
+    moveNavMesh("RailNav180Right")
+
+# Called by destination object on collision with player
+def moveNavMeshHome():
+    cont = logic.getCurrentController()
+    myParent = cont.owner["myParent"]
+    navMesh = logic.scene.objects[myParent]
+    navMesh.position = (0, 0, -200.0)
+    cont.owner["endActive"] = False
+
+
+######
+# END Gliding (Corner Assist) for Shapes 4 and 5
+######
 
 
 # Flip player over or reset to start position

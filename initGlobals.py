@@ -31,4 +31,5 @@ def init():
     G.glideCooldownTimer = 0.0
     G.glideCooldown = 0
     G.activeShape = 1
+    G.cornerAssist = False
 

@@ -76,13 +76,14 @@ def turboButtonToggle():
 
 # Display Glide State
 # Air Gliding: cooldown starts after landing.
-# Ribbon Gliding: cooldown starts after releasing space.
+# Ribbon Gliding: Either on or off, no cooldown.
 def displayGlideStatus():
     cont = logic.getCurrentController()
 
     countDif = G.glideCooldown - G.glideCooldownTimer
     timerStr = str(int(countDif))
-    if G.activeShape <= 4:
+    if G.activeShape < 5:
+        # Air Gliding
         if countDif < 0:
             cont.owner["Text"] = "Glide: Ready"
         elif int(G.glideCooldownTimer) == 0:
@@ -90,10 +91,9 @@ def displayGlideStatus():
         elif countDif > 0:
             cont.owner["Text"] = "Glide: Charging (" + timerStr + ")"
     else:
-        if countDif < 0:
-            cont.owner["Text"] = "Glide: Ready"
-        elif cont.owner["glidePressed"] ==  True and G.glideCooldownTimer < 0.05:
-            cont.owner["Text"] = "Gliding"
-        elif countDif > 0:
-            cont.owner["Text"] = "Glide: Charging (" + timerStr + ")"
+        # Ribbon Gliding
+        if G.cornerAssist == False:
+            cont.owner["Text"] = "Glide: Off"
+        elif G.cornerAssist == True:
+            cont.owner["Text"] = "Glide: On"
 
