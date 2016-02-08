@@ -1,13 +1,18 @@
-Playing the Game!
-======================
+Downloads
+----------
 
-For the moment, please download and install Blender version 2.5 to 2.71 then download the loop_dipole_###.blend file in the main directory as well as the assets directory. Once the files are downloaded, you can run the game by using the Blender Player built into Blender. 
+This directory has misc files related to the project.
 
-1. Open the .blend file.
-2. In the lower right (Properties) window, click the camera icon.
-3. Scroll down to the Standalone Player section and expand it if it is closed.
-4. Set your desired resolution, click the Fullscreen option if the resolution will be the same as your screen size. You can also set the level of anti aliasing (8x is high, 4x is good, 2x or none if you don't have desktop graphics card).
-5. Press the Start button to launch the game.
-6. Press the Escape key to close the game (note that your progress will not be saved at this time).
+Other downloads, such as graphic source files and screenshots, are on MEGA.nz here:
 
-In the future, when I have enough game play systems completed to warrant it, I will package the game as standalone downloads that can be installed and run like any other program. I'll make installers for Linux and Windows (sorry, I don't have a Mac). These packages will be verified to run on Linux Mint 17 64Bit and Windows 7 64Bit, but should run directly on most Linux distibutions as well as Windows Vista/7/8.
+https://mega.nz/#fm/CUcQyY6J
+
+
+tatwi_blue_blender_theme.xml
+-----------------------------
+- This a theme for Blender that I made.
+- It is light grey with blue highlights.
+- The 3D view port is the same as the default.
+- The logic bricks and many buttons are easier to see.
+
+
