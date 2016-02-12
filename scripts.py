@@ -4,10 +4,10 @@ Loop Dipole and the Chaoties
 Created by R. Bassett Jr.
 www.tpot.ca
 
-General Public Licence v3
+General Public License v3
 
 ---------------------
-Player Movement
+Fundamental player movement, stat changing, and related player input
 ---------------------
 
 The player is based on the "car" from the vehicle physics demo, which has a whack of C++ dedicated
@@ -43,8 +43,11 @@ from bge import render as r
 import math
 import GameLogic as G
 
-# Set/Change the wheel stats in their own function
-# because there are a load of them!
+########
+# BEGIN bare object (player) movement and handling
+########
+
+# Set/Change the wheel stats, which handle driving physics on the gound.
 def setWheelStats():
     # Apply handling stats to the (invisible) wheels
     vehicle = constraints.getVehicleConstraint(logic.car["cid"])
@@ -77,44 +80,8 @@ def setWheelStats():
     vehicle.setTyreFriction(bstat["friction"],3)
 
 
-#  Set default shape values (Green glider shape)
-def resetStats():
-    # Max/Top Speed
-    logic.car.linVelocityMax = 60
-
-    # Default Shape
-    logic.car["activeShape"] = 1
-    logic.car["accelNormal"] = -12.0
-    logic.car["accelTurbo"] = -16.0
-    logic.car["turboDur"] = 7.0
-    logic.car["turboCooldown"] = 10.0
-    logic.car["brakeForce"] = 10.0
-    logic.car["steerAmount"] = 0.08
-    logic.car["glideCooldown"] = 30
-    logic.car["glideDur"] = 5
-    logic.car["glideBonusY"] = 0.2
-    logic.car["glideBonusZ"] = 0.38
-    # Lift impulse or "jump"
-    logic.car["glideJumpY"] = 0.1
-    logic.car["glideJumpZ"] = 0.43
-
-    # Base Stats
-    bstat = logic.scene.objects["BaseStats"]
-    bstat["influence"] = 0.01
-    bstat["stiffness"] = 20.0
-    bstat["damping"] = 2.0
-    bstat["compression"] = 4.0
-    bstat["friction"] = 10.0
-    bstat["Stability"] = 0.1
-
-    # Abilities
-    abilities = logic.scene.objects["Abilities"]
-    abilities["abilityLMB"] = 1
-    abilities["abilityRMB"] = 1
-
-
-# This is called from the object named "bare"
-# is run once at the start of the game
+# Put the physics for the player together, using the car logic
+# Called from the object named "bare" once at the start of the game
 def carInit():
     # setup aliases for Blender API access
     cont = logic.getCurrentController()
@@ -141,10 +108,13 @@ def carInit():
     logic.car["cid"] = vehicle.getConstraintId()
     vehicle = constraints.getVehicleConstraint(logic.car["cid"])
 
-    # initialize temporary variables
+    # Initialize variable to store speed so we can get the delta between frames
     logic.car["dS"] = 0.0
 
-    # attached wheel based on actuator name
+    # Attach the wheels to the bare object
+    # (0)---(1)
+    #    [|]
+    # (2)---(3)
     wheel0 = logic.scene.objects["Wheel0"]
     wheelAttachPosLocal = [wheelBaseWide ,wheelFrontOffset, AttachHeightLocal]
     vehicle.addWheel(wheel0,wheelAttachPosLocal,wheelAttachDirLocal,wheelAxleLocal,suspensionLength,wheelRadius,1)
@@ -166,7 +136,7 @@ def carInit():
     setWheelStats()
 
 
-# Cast a Ray to tell if we're still on the ground
+# Check if we are on the ground using -Y ray cast from bare object
 def groundCheck():
     ray = logic.car.sensors["groundRay"]
     if ray.positive:
@@ -178,7 +148,7 @@ def groundCheck():
         logic.car["onGround"] = False
 
 
-# Cast a Ray to tell if we're on the ribbon texture
+# Check if we are on a ribbon (road) using -Y ray cast from bare object
 # Change movement speed based on shape
 def ribbonCheck():
     ray = logic.car.sensors["ribbonRay"]
@@ -208,6 +178,108 @@ def applyRibbonSpeedMod():
                 logic.car["speedMult"]  = 0.5
         elif logic.car["onRibbon"] == True:
             logic.car["speedMult"]  = 1
+
+
+# Main player "game loop"
+# Called from bare object (player) every frame
+def carHandler():
+    vehicle = constraints.getVehicleConstraint(logic.car["cid"])
+
+    # calculate speed by using the back wheel rotation and delta of value stored in the previous frame
+    S = vehicle.getWheelRotation(2)+vehicle.getWheelRotation(3)
+    logic.car["speed"] = (S - logic.car["dS"])*10.0
+
+    # calculate world velocity, which is also valid while in the air. Raw value used for speedometer UI.
+    Xspeed, Yspeed, Zspeed = logic.car.getLinearVelocity(True)
+    linSum = Xspeed + Yspeed
+    G.mySpeed = linSum
+
+    # apply engine force
+    vehicle.applyEngineForce(logic.car["force"]*10,0)
+    vehicle.applyEngineForce(logic.car["force"]*10,1)
+    vehicle.applyEngineForce(logic.car["force"]*10,2)
+    vehicle.applyEngineForce(logic.car["force"]*10,3)
+
+    # calculate steering with varying sensitivity
+    if math.fabs(logic.car["speed"])<15.0: s = 2.0
+    elif math.fabs(logic.car["speed"])<28.0: s=1.5
+    elif math.fabs(logic.car["speed"])<40.0: s=1.0
+    else: s=0.5
+
+    # steer front wheels
+    vehicle.setSteeringValue(logic.car["steer"]*s,0)
+    vehicle.setSteeringValue(logic.car["steer"]*s,1)
+
+    # slowly ease off gas and center steering
+    logic.car["steer"] *= 0.6
+    logic.car["force"] *= 0.9
+
+    # align to Z axis to prevent flipping
+    bstat = logic.scene.objects["BaseStats"]
+    logic.car.alignAxisToVect([0.0,0.0,1.0], 2, bstat["Stability"])
+
+    # store old values
+    logic.car["dS"] = S
+    logic.car["dlinSum"] = linSum
+
+    # Checks and status updates
+    groundCheck()
+    ribbonCheck()
+    applyRibbonSpeedMod()
+    turboStatus()
+    glideStatus()
+
+
+# Move the player
+def movePlayer(direction):
+    if direction == 1:
+        # Forward
+        logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
+    elif direction == 0 and logic.car["speed"] < 10.0:
+        # Reverse
+        logic.car["force"]  = logic.car["accelNormal"] / 2 * logic.car["speedMult"] * -1
+
+
+# Apply keyboard steering
+def steerPlayer(direction):
+    if direction == 1:
+        # Left
+        logic.car["steer"] += logic.car["steerAmount"]
+    elif direction == 0:
+        # Right
+        logic.car["steer"] -= logic.car["steerAmount"]
+
+
+# Apply brakes
+def applyBrakes():
+    if logic.car["speed"] > 2.0:
+         # Braking when going forward
+        logic.car["force"]  = logic.car["brakeForce"]
+    if logic.car["speed"] < 0:
+        # Braking when going backward
+        logic.car["force"]  = -10
+
+
+# Handle Turbo key press
+def pressedTurbo():
+    if G.turboCooldown == True:
+        return
+
+    if G.turboActive == True:
+        applyTurbo()
+    else:
+        G.turboActive = True
+        logic.car["turboDurTimer"] = 0
+        applyTurbo()
+
+
+# Apply Turbo motion
+def applyTurbo():
+    if logic.car["onGround"] == True:
+        logic.car.linVelocityMax += 5
+        logic.car["force"]  = logic.car["accelTurbo"]
+    else:
+        logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
 
 
 # Reset max speed after using turbo
@@ -249,6 +321,23 @@ def turboStatus():
     G.turboCoolTimerUI = str(int(logic.car["turboCooldown"] - logic.car["turboCoolTimer"]))
 
 
+# Gliding/flying for aircraft shapes
+# Glide timer is kept at 0 while the player is holding spacebar down and is in the air
+def airGlide():
+    if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
+        logic.car["glideTimer"] = 0
+        # Apply upward and forward impulse
+        for x in range(0, 30):
+            logic.car.linearVelocity[1] += logic.car["glideJumpY"]
+            logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
+    elif logic.car["onGround"] == False:
+        # Maintain Glide
+        logic.car.linearVelocity[1] += logic.car["glideBonusY"] * 2
+        logic.car.linearVelocity[2] += logic.car["glideBonusZ"] * 2
+        # Allow gliding as long as you like, but start cooldown upon landing
+        logic.car["glideTimer"] = 0
+
+
 def glideStatus():
     # Send timer data to global variable for UI
     G.glideCooldownTimer = logic.car["glideTimer"]
@@ -257,54 +346,125 @@ def glideStatus():
     G.cornerAssist = logic.car["cornerAssist"]
 
 
-# called from main car object
-def carHandler():
-    vehicle = constraints.getVehicleConstraint(logic.car["cid"])
+### BEGIN Gliding (Corner Assist) for Shapes 4 and 5
 
-    # calculate speed by using the back wheel rotation speed
-    S = vehicle.getWheelRotation(2)+vehicle.getWheelRotation(3)
-    logic.car["speed"] = (S - logic.car["dS"])*10.0
+# The two car shapes can't fly, instead they can turn on corner assist mode
+# which automatically sucks them around 90 and 180 degree turns.
 
-    # calculate world velocity, which is also valid while in the air
-    Xspeed, Yspeed, Zspeed = logic.car.getLinearVelocity(True)
-    linSum = Xspeed + Yspeed
-    G.mySpeed = linSum
+# Toggle ON/OFF state (once in 1 second)
+def groundGlide():
+    logic.scene = logic.getCurrentScene()
+    timer = logic.scene.objects["Controller"]
+    if timer["timer"] > 1:
+        timer["timer"] = 0
+        if logic.car["cornerAssist"] == False:
+            logic.car["cornerAssist"] = True
+            cornerTriggerVisibility(True)
+        elif logic.car["cornerAssist"] == True:
+            logic.car["cornerAssist"] = False
+            cornerTriggerVisibility(False)
 
-    # apply engine force
-    vehicle.applyEngineForce(logic.car["force"]*10,0)
-    vehicle.applyEngineForce(logic.car["force"]*10,1)
-    vehicle.applyEngineForce(logic.car["force"]*10,2)
-    vehicle.applyEngineForce(logic.car["force"]*10,3)
+def cornerTriggerVisibility(state):
+    for o in logic.scene.objects:
+        if 'CornerTrigger' in o:
+            o.setVisible(state)
 
-    # calculate steering with varying sensitivity
-    if math.fabs(logic.car["speed"])<15.0: s = 2.0
-    elif math.fabs(logic.car["speed"])<28.0: s=1.5
-    elif math.fabs(logic.car["speed"])<40.0: s=1.0
-    else: s=0.5
+# Move the navigation mesh and trigger group into position
+def moveNavMesh(meshName, startTrigger):
+    if logic.car["activeShape"] > 4:
+        if logic.car["onRibbon"] == True and logic.car["cornerAssist"] == True:
+            cont = logic.getCurrentController()
+            logic.scene = logic.getCurrentScene()
+            timer = logic.scene.objects["Controller"]
 
-    # steer front wheels
-    vehicle.setSteeringValue(logic.car["steer"]*s,0)
-    vehicle.setSteeringValue(logic.car["steer"]*s,1)
+            # timer gets set to 0 when approaching a corner assist trigger from the wrong direction
+            # (when player collides with a CornerTriggerWrongDirection object), thereby preventing this
+            # function from spawning an unwanted nav mesh/trigger that would send the player back the way they came.
+            if timer["timer"] > 0.5:
+                trigger = logic.scene.objects[startTrigger]
+                trigger["ready"] = True
+                navMesh = logic.scene.objects[meshName]
+                navMesh.worldPosition = cont.owner.worldPosition
+                navMesh.worldOrientation = cont.owner.worldOrientation
 
-    # slowly ease off gas and center steering
-    logic.car["steer"] *= 0.6
-    logic.car["force"] *= 0.9
+# Called by the RailNav___Start objects on collision with player
+# Script logic brick does not appear to allow using argruements when calling a function, so I have a function
+# for each logic brick that simply calls the fuction I want to use with the correct arguements...
+def moveNavMesh180R():
+    moveNavMesh("RailNav180Right", "180GoRightStart")
 
-    # align car to Z axis to prevent flipping
-    bstat = logic.scene.objects["BaseStats"]
-    logic.car.alignAxisToVect([0.0,0.0,1.0], 2, bstat["Stability"])
+def moveNavMesh180L():
+    moveNavMesh("RailNav180Left", "180GoLeftStart")
 
-    # store old values
-    logic.car["dS"] = S
-    logic.car["dlinSum"] = linSum
+def moveNavMesh90R():
+    moveNavMesh("RailNav90Right", "90GoRightStart")
 
-    # Checks
-    groundCheck()
-    ribbonCheck()
-    applyRibbonSpeedMod()
-    turboStatus()
-    glideStatus()
+def moveNavMesh90L():
+    moveNavMesh("RailNav90Left", "90GoLeftStart")
 
+# Turn off the pathing effect
+# Called by RailNav___End objects on collision with player
+def goOff():
+    logic.scene = logic.getCurrentScene()
+    right90 = logic.scene.objects["90GoRightStart"]
+    left90 = logic.scene.objects["90GoLeftStart"]
+    right180 = logic.scene.objects["180GoRightStart"]
+    left180 = logic.scene.objects["180GoLeftStart"]
+
+    right90["go"] = False
+    left90["go"] = False
+    right180["go"] = False
+    left180["go"] = False
+
+# Move the navigation mesh and trigger group back under the world
+# Called by the RailNav___Mover objects on collision with the player
+def moveNavMeshHome():
+    cont = logic.getCurrentController()
+    myParent = cont.owner["myParent"]
+    navMesh = logic.scene.objects[myParent]
+
+    logic.scene = logic.getCurrentScene()
+    right90 = logic.scene.objects["90GoRightStart"]
+    left90 = logic.scene.objects["90GoLeftStart"]
+    right180 = logic.scene.objects["180GoRightStart"]
+    left180 = logic.scene.objects["180GoLeftStart"]
+
+    #Turn off pathing trigger to avoid hitting the player with it while moving it (super important!)
+    right90["ready"] = False
+    left90["ready"] = False
+    right180["ready"] = False
+    left180["ready"] = False
+
+    navMesh.worldPosition = (0, 0, -200)
+### END Gliding (Corner Assist) for Shapes 4 and 5
+
+
+# Flip player over and lift them to unstick
+def rescuePlayer():
+    pos = logic.car.worldPosition
+    if logic.car["rescue"] > 5:
+        # re-orient car (5 second cooldown)
+        logic.car.position = (pos[0], pos[1], pos[2]+3.0)
+        logic.car["rescue"] = -10
+    if logic.car["rescue"] < 0:
+        # right the player
+        logic.car.alignAxisToVect([0.0,0.0,1.0], 2, 1.0)
+        logic.car.setLinearVelocity([0.0,0.0,0.0],1)
+        logic.car.setAngularVelocity([0.0,0.0,0.0],1)
+        logic.car["rescue"] = 0
+
+
+# Send player back home after "death"
+# Called by chaos level on collision with player or CTL + R key press by the player
+def resetPlayer():
+    rescuePlayer()
+    changeShape(1)
+    logic.car.position = (0, 0, 8.0)
+
+
+########
+# BEGIN Changing shapes / setting stats and abilities
+########
 
 # Set all player shapes invisible
 def makeInvisible():
@@ -330,6 +490,42 @@ def makeVisible():
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
     elif showMe == 6:
         logic.scene.objects["Loop 6_proxy"].setVisible(True)
+
+
+#  Set default shape values (Green glider shape)
+def resetStats():
+    # Max/Top Speed
+    logic.car.linVelocityMax = 60
+
+    # Default Shape
+    logic.car["activeShape"] = 1
+    logic.car["accelNormal"] = -12.0
+    logic.car["accelTurbo"] = -16.0
+    logic.car["turboDur"] = 7.0
+    logic.car["turboCooldown"] = 10.0
+    logic.car["brakeForce"] = 10.0
+    logic.car["steerAmount"] = 0.08
+    logic.car["glideCooldown"] = 30
+    logic.car["glideDur"] = 5
+    logic.car["glideBonusY"] = 0.2
+    logic.car["glideBonusZ"] = 0.38
+    # Lift impulse or "jump"
+    logic.car["glideJumpY"] = 0.1
+    logic.car["glideJumpZ"] = 0.43
+
+    # Base Stats
+    bstat = logic.scene.objects["BaseStats"]
+    bstat["influence"] = 0.01
+    bstat["stiffness"] = 20.0
+    bstat["damping"] = 2.0
+    bstat["compression"] = 4.0
+    bstat["friction"] = 10.0
+    bstat["Stability"] = 0.1
+
+    # Abilities
+    abilities = logic.scene.objects["Abilities"]
+    abilities["abilityLMB"] = 1
+    abilities["abilityRMB"] = 1
 
 
 # Change Shapes
@@ -465,193 +661,42 @@ def changeShape(choice):
         # First person camera is ON so don't show shape.
         makeInvisible()
 
-# Apply Turbo motion
-def applyTurbo():
-    if logic.car["onGround"] == True:
-        logic.car.linVelocityMax += 5
-        logic.car["force"]  = logic.car["accelTurbo"]
-    else:
-        logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
-
-# Handle Turbo key press
-def pressedTurbo():
-    if G.turboCooldown == True:
-        return
-
-    if G.turboActive == True:
-        applyTurbo()
-    else:
-        G.turboActive = True
-        logic.car["turboDurTimer"] = 0
-        applyTurbo()
-
-
-# Gliding/flying for aircraft shapes
-# Glide timer is kept at 0 while the player is holding spacebar down and is in the air
-def airGlide():
-    if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
-        logic.car["glideTimer"] = 0
-        # Apply upward and forward impulse
-        for x in range(0, 30):
-            logic.car.linearVelocity[1] += logic.car["glideJumpY"]
-            logic.car.linearVelocity[2] += logic.car["glideJumpZ"] * (logic.car["speed"] / 200 + 1)
-    elif logic.car["onGround"] == False:
-        # Maintain Glide
-        logic.car.linearVelocity[1] += logic.car["glideBonusY"] * 2
-        logic.car.linearVelocity[2] += logic.car["glideBonusZ"] * 2
-        # Allow gliding as long as you like, but start cooldown upon landing
-        logic.car["glideTimer"] = 0
-
 
 ########
-# BEGIN Gliding (Corner Assist) for Shapes 4 and 5
+# Player Input
 ########
-# The two car shapes can't fly, instead they can turn on corner assist mode
-# which automatically sucks them around 90 and 180 degree turns.
 
-# Toggle ON/OFF state (once in 1 second)
-def groundGlide():
-    logic.scene = logic.getCurrentScene()
-    timer = logic.scene.objects["Controller"]
-    if timer["timer"] > 1:
-        timer["timer"] = 0
-        if logic.car["cornerAssist"] == False:
-            logic.car["cornerAssist"] = True
-            cornerTriggerVisibility(True)
-        elif logic.car["cornerAssist"] == True:
-            logic.car["cornerAssist"] = False
-            cornerTriggerVisibility(False)
-
-def cornerTriggerVisibility(state):
-    for o in logic.scene.objects:
-        if 'CornerTrigger' in o:
-            o.setVisible(state)
-
-# Move the navigation mesh and trigger group into position
-def moveNavMesh(meshName, startTrigger):
-    if logic.car["activeShape"] > 4:
-        if logic.car["onRibbon"] == True and logic.car["cornerAssist"] == True:
-            cont = logic.getCurrentController()
-            logic.scene = logic.getCurrentScene()
-            timer = logic.scene.objects["Controller"]
-
-            # timer gets set to 0 when approaching a corner assist trigger from the wrong direction
-            # (when player collides with a CornerTriggerWrongDirection object), thereby preventing this
-            # function from spawning an unwanted nav mesh/trigger that would send the player back the way they came.
-            if timer["timer"] > 0.5:
-                trigger = logic.scene.objects[startTrigger]
-                trigger["ready"] = True
-                navMesh = logic.scene.objects[meshName]
-                navMesh.worldPosition = cont.owner.worldPosition
-                navMesh.worldOrientation = cont.owner.worldOrientation
-
-# Called by the RailNav___Start objects on collision with player
-def moveNavMesh180R():
-    moveNavMesh("RailNav180Right", "180GoRightStart")
-
-def moveNavMesh180L():
-    moveNavMesh("RailNav180Left", "180GoLeftStart")
-
-def moveNavMesh90R():
-    moveNavMesh("RailNav90Right", "90GoRightStart")
-
-def moveNavMesh90L():
-    moveNavMesh("RailNav90Left", "90GoLeftStart")
-
-# Turn off the pathing effect
-# Called by RailNav___End objects on collision with player
-def goOff():
-    logic.scene = logic.getCurrentScene()
-    right90 = logic.scene.objects["90GoRightStart"]
-    left90 = logic.scene.objects["90GoLeftStart"]
-    right180 = logic.scene.objects["180GoRightStart"]
-    left180 = logic.scene.objects["180GoLeftStart"]
-
-    right90["go"] = False
-    left90["go"] = False
-    right180["go"] = False
-    left180["go"] = False
-
-# Move the navigation mesh and trigger group back under the world
-# Called by the RailNav___Mover objects on collision with the player
-def moveNavMeshHome():
-    cont = logic.getCurrentController()
-    myParent = cont.owner["myParent"]
-    navMesh = logic.scene.objects[myParent]
-
-    logic.scene = logic.getCurrentScene()
-    right90 = logic.scene.objects["90GoRightStart"]
-    left90 = logic.scene.objects["90GoLeftStart"]
-    right180 = logic.scene.objects["180GoRightStart"]
-    left180 = logic.scene.objects["180GoLeftStart"]
-
-    #Turn off pathing trigger to avoid hitting the player with it while moving it (super important!)
-    right90["ready"] = False
-    left90["ready"] = False
-    right180["ready"] = False
-    left180["ready"] = False
-
-    navMesh.worldPosition = (0, 0, -200)
-
-
-######
-# END Gliding (Corner Assist) for Shapes 4 and 5
-######
-
-
-# Flip player over or reset to start position
-def resetPlayer():
-    pos = logic.car.worldPosition
-    if logic.car["rescue"] > 5:
-        #  re-orient car (5 second cooldown)
-        logic.car.position = (pos[0], pos[1], pos[2]+3.0)
-        logic.car["rescue"] = -10
-    if pos[2] < -3.0:
-        #  return to start position if below lowest level
-        logic.car.position = (0, 0, 8.0)
-        logic.car["rescue"] = -10
-    if logic.car["rescue"] < 0:
-        #  right the player
-        logic.car.alignAxisToVect([0.0,0.0,1.0], 2, 1.0)
-        logic.car.setLinearVelocity([0.0,0.0,0.0],1)
-        logic.car.setAngularVelocity([0.0,0.0,0.0],1)
-        logic.car["rescue"] = 0
-
-
-# called from main car object
+# Keyboard - called from bare object
 def keyHandler():
     cont = logic.getCurrentController()
-    keys = cont.sensors["key"].events
-    for key in keys:
+    sensor = cont.sensors["KeyInput"].events
+    for key in sensor:
         # Forward
-        if key[0] == events.WKEY:
-            logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
+        if key[0] == events.WKEY or key[0] == events.UPARROWKEY:
+            movePlayer(1)
         # Turbo
-        if key[0] == events.LEFTSHIFTKEY:
+        if key[0] == events.LEFTSHIFTKEY or key[0] == events.RIGHTSHIFTKEY:
              pressedTurbo()
         # Reverse
-        elif key[0] == events.SKEY:
-            if logic.car["speed"] < 10.0:
-                logic.car["force"]  = logic.car["accelNormal"] / 2 * logic.car["speedMult"] * -1
+        elif key[0] == events.SKEY or key[0] == events.DOWNARROWKEY:
+            movePlayer(0)
         # Right
-        elif key[0] == events.DKEY:
-            logic.car["steer"] -= logic.car["steerAmount"]
+        elif key[0] == events.DKEY or key[0] == events.RIGHTARROWKEY:
+            steerPlayer(0)
         # Left
-        elif key[0] == events.AKEY:
-            logic.car["steer"] += logic.car["steerAmount"]
-        # Reset Player
+        elif key[0] == events.AKEY or key[0] == events.LEFTARROWKEY:
+            steerPlayer(1)
+        # Rescue/Unstick Player
         elif key[0] == events.RKEY:
+                rescuePlayer()
+        # Reset Player
+        elif key[0] == events.PKEY:
                 resetPlayer()
         # Brake
-        elif key[0] == events.LEFTCTRLKEY:
-            if logic.car["speed"] > 2.0:
-                 # Braking when going forward
-                logic.car["force"]  = logic.car["brakeForce"]
-            if logic.car["speed"] < 0:
-                # Braking when going backward
-                logic.car["force"]  = -10
-        # Gliding / Turrets
-        elif key[0] == events.SPACEKEY:
+        elif key[0] == events.LEFTCTRLKEY or key[0] == events.RIGHTCTRLKEY:
+            applyBrakes()
+        # Gliding
+        elif key[0] == events.SPACEKEY or key[0] == events.PAD0:
             if logic.car["activeShape"] <= 4:
                 airGlide()
             elif logic.car["activeShape"] >= 5:
@@ -671,7 +716,7 @@ def keyHandler():
             changeShape(6)
 
 
-# Mouse Steering
+# Mouse Steering - called from bare object
 def mouseMove():
     cont = logic.getCurrentController()
     logic.car = cont.owner
@@ -725,5 +770,3 @@ def mouseMove():
 
     #  reset mouse for next frame and keep mouse in the game window
     r.setMousePosition(h, w)
-
-

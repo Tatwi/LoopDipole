@@ -46,7 +46,7 @@ Game Play:
 	Solve all the "Fountain Puzzles" to win the game!
 
 
-Controls:
+Controls (Right Handed):
 	W = Forward
 	S = Reverse
 	A = Left
@@ -54,22 +54,35 @@ Controls:
 	Left Control = Brake
 	Left Shift = Turbo
 	Spacebar = Glide
-	R = Resue if you flip over
+
+
+Controls (Left Handed):
+	Arrow Up = Forward
+	Arrow Down = Reverse
+	Arrow Left = Left
+	Arror Right = Right
+	Right Control = Brake
+	Right Shift = Turbo
+	Numpad 0 = Glide (if you don't have a number pad on your keyboard you can still use the spacebar; The movement keys aren't used when gliding, so you don't really *need* to keep your fingers on them.)
 
 Gliding:
-    Shapes 1 - 4, hold Spacebar to maintain glide.
+    Shapes 1 - 4, hold Spacebar or Numpad 0 to maintain glide.
     Shape 1 purposely has a limited gliding range.
     Shapes 5 & 6, Spacebar toggles ON/OFF corner assist mode, which auto-drives around many corners.
 
 
 Mouse:
 	Movement while on the ground = turn left / right
-	Movement while in the air = bank left/right, pitch up/down (a little, but enough to stay in the air with practice)
+	Movement while in the air = bank left/right, pitch up/down
 	Left Button = Ability 1
 	Right Button = Ability 2
 	Middle Button = (not yet implimented)
 	Mouse Wheel = (not yet implimented)
 
+Mouse Tips:
+    - In the air, turning too quickly will cause a loss of forward momentum and altitude (as in "real life"). A well timed turbo can help you make sharper turns without losing altitude.
+    - In the air, you can gain altitude by sweeping the mouse up over and over. Sweep up, lift mouse off the desk, move it backward, place it back down, repeat. A little effort goes a long way, so to speak!
+    - On the ground, getting a feel when to steer with the keys or the mouse or both at the same time is a HUGE part of the game - you really can't do just one or the other in every situation! Explore their relationship with each of the shapes to get the most out of what the game has to offer. For instance, you can drive down the tallest twisty-ramps at 450KPH+ once you get used to it!
 
 Change "Shape":
 	Until UI is created...
@@ -77,8 +90,12 @@ Change "Shape":
 
 
 Other Keys:
-	TAB = Toggle Inventory UI (not yet implimented)
+
+	TAB = Toggle UI (not yet implimented)
 	F = Interact with Puzzles (not yet implimented)
+	R = Rescue/unstick if you flip over
+	P = Go home, reset shape to default (in case you get lost or just want to go home)
+	U = Toggle speedometer units from Kilometers/hour to Miles/hour
 	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
 	F1 through F4 = Cameras
 	F5 = Spawn some testing targets to push around and shoot at.
