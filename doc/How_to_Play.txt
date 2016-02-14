@@ -98,7 +98,8 @@ Other Keys:
 	U = Toggle speedometer units from Kilometers/hour to Miles/hour
 	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
 	F1 through F4 = Cameras
-	F5 = Spawn some testing targets to push around and shoot at.
-	F9 = Save Game (nothing to really save at the moment though)
+	F5 = Spawn some testing targets to push around and shoot at
+	F9 = Take a screenshot
+	F10 = Save Game (nothing to really save at the moment though)
 	F12 = Reset Game (without saving current data)
 	ESC = Exit Game (without saving current data, until UI is completed)
