@@ -94,12 +94,11 @@ Other Keys:
 	TAB = Toggle UI (not yet implimented)
 	F = Interact with Puzzles (not yet implimented)
 	R = Rescue/unstick if you flip over
-	P = Go home, reset shape to default (in case you get lost or just want to go home)
 	U = Toggle speedometer units from Kilometers/hour to Miles/hour
 	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
 	F1 through F4 = Cameras
 	F5 = Spawn some testing targets to push around and shoot at
 	F9 = Take a screenshot
 	F10 = Save Game (nothing to really save at the moment though)
-	F12 = Reset Game (without saving current data)
+	F12 = Go home, reset shape to default (in case you get lost or just want to go home)
 	ESC = Exit Game (without saving current data, until UI is completed)

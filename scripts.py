@@ -690,7 +690,7 @@ def keyHandler():
         elif key[0] == events.RKEY:
                 rescuePlayer()
         # Reset Player
-        elif key[0] == events.PKEY:
+        elif key[0] == events.F12KEY:
                 resetPlayer()
         # Brake
         elif key[0] == events.LEFTCTRLKEY or key[0] == events.RIGHTCTRLKEY:
