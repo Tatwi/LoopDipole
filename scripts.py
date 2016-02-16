@@ -136,6 +136,10 @@ def carInit():
     setWheelStats()
 
 
+def debugEachFrame():
+    logic.car["test"] = logic.car.linVelocityMax
+
+
 # Check if we are on the ground using -Y ray cast from bare object
 def groundCheck():
     ray = logic.car.sensors["groundRay"]
@@ -228,6 +232,7 @@ def carHandler():
     applyRibbonSpeedMod()
     turboStatus()
     glideStatus()
+    debugEachFrame()
 
 
 # Move the player
@@ -319,6 +324,21 @@ def turboStatus():
     # Send timer data to global variables for UI
     G.turboDurTimerUI = str(int(logic.car["turboDur"] - logic.car["turboDurTimer"]))
     G.turboCoolTimerUI = str(int(logic.car["turboCooldown"] - logic.car["turboCoolTimer"]))
+
+
+# Called by collision with player at bottom ski jump
+# Logic Brick creates SkiJumpEnd object and parents to player
+def skiJumpStart():
+    logic.car.linVelocityMax = 300
+    logic.car["turboDur"] = 500
+    logic.car.linearVelocity[1] += 50
+    logic.car.linearVelocity[2] += 33
+
+
+# Called by SkiJumpEnd object when it hits something (namely the ground)
+def skiJumpEnd():
+    resetTopSpeed()
+    logic.car["turboDur"] = 10
 
 
 # Gliding/flying for aircraft shapes
@@ -615,8 +635,9 @@ def changeShape(choice):
         logic.car["glideDur"] = 12
         logic.car["steerAmount"] = 0.075
         # Wheel/Handling Stats
+        bstat["stiffness"] = 30
         bstat["Stability"] = 0.1
-        setWheelStats()
+        #setWheelStats()
     elif choice == 5:
         # Scifimobile
         # Trades Glide for ability to stick to ribbons, fastest, weak, reduced agro.
