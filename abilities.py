@@ -22,31 +22,15 @@ from bge import render as r
 import math
 
 
+# Prevent laser bolts from shooting up into the air when driving
+def levelLasers():
+    em6 = logic.scene.objects["Emitter6"]
+    em7 = logic.scene.objects["Emitter7"]
+    logic.car = logic.scene.objects["bare"]
+    player = logic.car.worldOrientation
+    em6.worldOrientation = (player[0], player[1], [0.0, 0.0, 1.0])
+    em7.worldOrientation = (player[0], player[1], [0.0, 0.0, 1.0])
 
-## Block Barrage: Throw some blocks ahead.
-def blockBarrage():
-    cont = logic.getCurrentController()
-    obj = cont.owner
-
-    # Get all the emitter actuators
-    em1 = logic.scene.objects["Emitter1"]
-    em1Acu = em1.actuators["Shoot"]
-    em2 = logic.scene.objects["Emitter2"]
-    em2Acu = em2.actuators["Shoot"]
-    em3 = logic.scene.objects["Emitter3"]
-    em3Acu = em3.actuators["Shoot"]
-    em4 = logic.scene.objects["Emitter4"]
-    em4Acu = em4.actuators["Shoot"]
-    em5 = logic.scene.objects["Emitter5"]
-    em5Acu = em5.actuators["Shoot"]
-
-    # Shoot one block per emitter, X times
-    for x in range(0, obj["barrage"]):
-        em1Acu.instantAddObject()
-        em2Acu.instantAddObject()
-        em3Acu.instantAddObject()
-        em4Acu.instantAddObject()
-        em5Acu.instantAddObject()
 
 
 # Inertial Reversal: Instantly go in the opposite direction without losing momentum.

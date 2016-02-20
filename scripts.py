@@ -641,7 +641,7 @@ def changeShape(choice):
     elif choice == 5:
         # Scifimobile
         # Trades Glide for ability to stick to ribbons, fastest, weak, reduced agro.
-        abilities["abilityLMB"] = 1
+        abilities["abilityLMB"] = 3
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
         logic.car["activeShape"] = 5
