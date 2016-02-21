@@ -27,9 +27,19 @@ def levelLasers():
     em6 = logic.scene.objects["Emitter6"]
     em7 = logic.scene.objects["Emitter7"]
     logic.car = logic.scene.objects["bare"]
+    ray = logic.car.sensors["groundRay"]
+
+    # Always level out in case of issues
     player = logic.car.worldOrientation
     em6.worldOrientation = (player[0], player[1], [0.0, 0.0, 1.0])
     em7.worldOrientation = (player[0], player[1], [0.0, 0.0, 1.0])
+
+    # Adjust to match angle of surface player is currently on
+    if ray.positive:
+        em6.alignAxisToVect(ray.hitNormal, 2, 1)
+        em7.alignAxisToVect(ray.hitNormal, 2, 1)
+
+
 
 
 
