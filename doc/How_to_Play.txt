@@ -76,8 +76,9 @@ Mouse:
 	Movement while in the air = bank left/right, pitch up/down
 	Left Button = Ability 1
 	Right Button = Ability 2
-	Middle Button = (not yet implimented)
-	Mouse Wheel = (not yet implimented)
+	Middle Button = Chase Camera (Default)
+	Mouse Wheel Up = Reverse Camera
+	Mouse Wheel Down = Close Third Person Camera
 
 Mouse Tips:
     - In the air, turning too quickly will cause a loss of forward momentum and altitude (as in "real life"). A well timed turbo can help you make sharper turns without losing altitude.
@@ -96,7 +97,10 @@ Other Keys:
 	R = Rescue/unstick if you flip over
 	U = Toggle speedometer units from Kilometers/hour to Miles/hour
 	1 through 0 = Use Energy to solve a Puzzle (not yet implimented)
-	F1 through F4 = Cameras
+	F1 = Chase Camera (Default)
+	F2 = Close Third Person Camera
+	F3 = Reverse Camera
+	F4 = First Person Camera
 	F5 = Spawn some testing targets to push around and shoot at
 	F9 = Take a screenshot
 	F10 = Save Game (nothing to really save at the moment though)
