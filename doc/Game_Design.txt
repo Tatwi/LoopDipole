@@ -184,6 +184,15 @@ Abilities: Button} Description (Energy type used - 1 per shot)
 - LMB} Smash into and destroy any Chaoties within 5 seconds to collect some energy (Orange).
 - RMB} Pump up the tunes to create three sonic booms that destroy any Chaotie in a large radius (Pentagon).
 
+1. Kid Car
+- SC: None
+- HP: 20
+- Quite slow, but goes the same speed everywhere. Easy to drive, lots of hit points. Made for kids!
+- Glide button turns on driving assist to automatically guide the player around many 90 and 180 degree bends in the ribbons.
+- Short, modest turbo on a short cooldown.
+- LMB} Shoots a barrage of blocks (Random Energy).
+- RMB} Instantly reverses direction (Pentagon).
+
 
 Chaoties and other Dangers:
 ---------------------------

@@ -11,8 +11,9 @@ Fundamental player movement, stat changing, and related player input
 ---------------------
 
 The player is based on the "car" from the vehicle physics demo, which has a whack of C++ dedicated
-to simulating vehicle physics. I've modified it to handle how I would like and I have added extra
-functionality, such as jumping, gliding, turbo speed, and mouse controls.
+to simulating vehicle physics. I've modified and added to it to the point where there's almost
+nothing left of the demo, but I'll leave the credits in here anyhow, because the demo's guidance
+was part of what made this project possible (to do in the Blender Game Engine).
 
 '''
 
@@ -169,7 +170,8 @@ def ribbonCheck():
 def carHandler():
     # Apply max/top speed constraint (any time we aren't changing it)
     logic.car["test"] = logic.car.linVelocityMax
-    if G.turboCooldown == False and G.turboActive == False:
+    #if G.turboCooldown == False and G.turboActive == False:
+    if logic.car["limitMaxVelocity"] == True:
         logic.car.linVelocityMax = logic.car["myLinVelocityMax"]
 
     vehicle = constraints.getVehicleConstraint(logic.car["cid"])
@@ -273,55 +275,78 @@ def pressedTurbo():
 # Apply Turbo motion
 def applyTurbo():
     if logic.car["onGround"] == True:
-        logic.car.linVelocityMax += 5
+        logic.car.linVelocityMax += 4
         logic.car["force"]  = logic.car["accelTurbo"]
     else:
+        logic.car.linVelocityMax += 1
         logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
 
 
 # Set Turbo status
 def turboStatus():
-    # Check/set the status
+    # Prevent slowing down while doing a skijump
+    skiJumping = logic.scene.objects["SkiJumpStart"]
+    if skiJumping["jumping"] < 7:
+        return
+
     if G.turboActive == True:
+        # Turbo is ON, so start timer and stop limiting max speed
         logic.car["turboCoolTimer"] = 0
+        logic.car["limitMaxVelocity"] = False
         if logic.car["turboDurTimer"] > logic.car["turboDur"]:
+            # Time is up, so turn off Turbo and start cooldown timer
             G.turboActive = False
             logic.car["turboCoolTimer"] = 0
             G.turboCooldown = True
     elif G.turboCooldown == True:
         logic.car["turboDurTimer"] = 0
-        if logic.car.linVelocityMax > logic.car["myLinVelocityMax"]:
-            # Gently reset top speed
-            logic.car.linVelocityMax -= 2
         if logic.car["turboCoolTimer"] > logic.car["turboCooldown"]:
             G.turboCooldown = False
     else:
          logic.car["turboCoolTimer"] = 0
          logic.car["turboDurTimer"] = 0
 
+    # Slow down after using turbo
+    if G.turboActive == False:
+        if logic.car.linVelocityMax > logic.car["myLinVelocityMax"]:
+            # Gently reset top speed
+            logic.car.linVelocityMax -= 2
+        elif logic.car.linVelocityMax <= logic.car["myLinVelocityMax"]:
+            # Back at normal top speed, so hard limit it again
+            logic.car["limitMaxVelocity"] = True
+
     # Send timer data to global variables for UI
     G.turboDurTimerUI = str(int(logic.car["turboDur"] - logic.car["turboDurTimer"]))
     G.turboCoolTimerUI = str(int(logic.car["turboCooldown"] - logic.car["turboCoolTimer"]))
 
 
+# Toss the player a good distance, based on their current speed.
 # Called by collision with player at bottom ski jump
 # Logic Brick creates SkiJumpEnd object and parents to player
 def skiJumpStart():
-    logic.car.linVelocityMax = 300
-    logic.car["turboDur"] = 500
+    cont = logic.getCurrentController()
+    cont.owner["jumping"] = 0
+    logic.car["limitMaxVelocity"] = False
+    logic.car.linVelocityMax = 5001
     logic.car.linearVelocity[1] += 50
     logic.car.linearVelocity[2] += 33
 
 
 # Called by SkiJumpEnd object when it hits something (namely the ground)
+# Also hard limited to 7 seconds by turboStatus(), which automatically brings speed down when not using turbo.
 def skiJumpEnd():
-    resetTopSpeed()
-    logic.car["turboDur"] = 10
+    logic.car.linVelocityMax = logic.car["myLinVelocityMax"]
+    logic.car["limitMaxVelocity"] = True
 
 
 # Gliding/flying for aircraft shapes
 # Glide timer is kept at 0 while the player is holding spacebar down and is in the air
 def airGlide():
+    # Prevent gliding while doing a skijump (avoid exploiting super high top speed)
+    skiJumping = logic.scene.objects["SkiJumpStart"]
+    if skiJumping["jumping"] < 7:
+        return
+
     if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
         logic.car["glideTimer"] = 0
         # Apply upward and forward impulse
@@ -346,7 +371,7 @@ def glideStatus():
 
 ### BEGIN Gliding (Corner Assist) for Shapes 4 and 5
 
-# The two car shapes can't fly, instead they can turn on corner assist mode
+# The three car shapes can't fly, instead they can turn on corner assist mode
 # which automatically sucks them around 90 and 180 degree turns.
 
 # Toggle ON/OFF state (once in 1 second)
@@ -668,16 +693,14 @@ def changeShape(choice):
     elif choice == 7:
         # Kid Car
         # Trades Glide for ability to stick to ribbons, free, easy to drive.
-        abilities["abilityLMB"] = 1
-        abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 7_proxy"].setVisible(True)
         logic.car["activeShape"] = 7
-        logic.car["myLinVelocityMax"] = 41
-        logic.car["speedMult"]  = 1.25
+        logic.car["myLinVelocityMax"] = 46
+        logic.car["speedMult"]  = 1.0
         logic.car["accelNormal"] = -8
         logic.car["accelTurbo"] = -14
-        logic.car["turboDur"] = 5
-        logic.car["turboCooldown"] = 10.0
+        logic.car["turboDur"] = 6
+        logic.car["turboCooldown"] = 6.0
         logic.car["glideCooldown"] = 2.0
         logic.car["brakeForce"] = 9
         logic.car["steerAmount"] = 0.035
