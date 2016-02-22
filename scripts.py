@@ -136,10 +136,6 @@ def carInit():
     setWheelStats()
 
 
-def debugEachFrame():
-    logic.car["test"] = logic.car.linVelocityMax
-
-
 # Check if we are on the ground using -Y ray cast from bare object
 def groundCheck():
     ray = logic.car.sensors["groundRay"]
@@ -168,25 +164,14 @@ def ribbonCheck():
             logic.car["onRibbon"] = False
 
 
-#  Shape specific modifier when off the ribbons
-def applyRibbonSpeedMod():
-    if logic.car["onGround"] == True:
-        if logic.car["onRibbon"] == False:
-            if logic.car["activeShape"]  == 1:
-                logic.car["speedMult"]  = 0.75
-            elif logic.car["activeShape"]  == 2:
-                logic.car["speedMult"]  = 1.0
-            elif logic.car["activeShape"]  >= 5:
-                logic.car["speedMult"]  = 0.25
-            else:
-                logic.car["speedMult"]  = 0.5
-        elif logic.car["onRibbon"] == True:
-            logic.car["speedMult"]  = 1
-
-
 # Main player "game loop"
 # Called from bare object (player) every frame
 def carHandler():
+    # Apply max/top speed constraint (any time we aren't changing it)
+    logic.car["test"] = logic.car.linVelocityMax
+    if G.turboCooldown == False and G.turboActive == False:
+        logic.car.linVelocityMax = logic.car["myLinVelocityMax"]
+
     vehicle = constraints.getVehicleConstraint(logic.car["cid"])
 
     # calculate speed by using the back wheel rotation and delta of value stored in the previous frame
@@ -229,20 +214,27 @@ def carHandler():
     # Checks and status updates
     groundCheck()
     ribbonCheck()
-    applyRibbonSpeedMod()
     turboStatus()
     glideStatus()
-    debugEachFrame()
 
 
 # Move the player
+# Note that in the air the player automatically increases to max speed when holding spacebar
 def movePlayer(direction):
+    # Ribbon Speed
+    adjustSpeed = 1.0
+
+    if logic.car["onGround"] == True:
+        if logic.car["onRibbon"] == False:
+            # Plain Ground Speed
+            adjustSpeed = 2 - logic.car["speedMult"]
+
     if direction == 1:
         # Forward
-        logic.car["force"]  = logic.car["accelNormal"] * logic.car["speedMult"]
+        logic.car["force"]  = logic.car["accelNormal"] * adjustSpeed
     elif direction == 0 and logic.car["speed"] < 10.0:
         # Reverse
-        logic.car["force"]  = logic.car["accelNormal"] / 2 * logic.car["speedMult"] * -1
+        logic.car["force"]  = logic.car["accelNormal"] / 2 * adjustSpeed * -1
 
 
 # Apply keyboard steering
@@ -287,22 +279,6 @@ def applyTurbo():
         logic.car.linearVelocity[1] += abs(logic.car["accelTurbo"]) / 40
 
 
-# Reset max speed after using turbo
-def resetTopSpeed():
-    if logic.car["activeShape"] == 1:
-        logic.car.linVelocityMax = 60
-    elif logic.car["activeShape"] == 2:
-        logic.car.linVelocityMax = 160
-    elif logic.car["activeShape"] == 3:
-        logic.car.linVelocityMax = 200
-    elif logic.car["activeShape"] == 4:
-        logic.car.linVelocityMax = 140
-    elif logic.car["activeShape"] == 5:
-        logic.car.linVelocityMax = 120
-    elif logic.car["activeShape"] == 6:
-        logic.car.linVelocityMax = 90
-
-
 # Set Turbo status
 def turboStatus():
     # Check/set the status
@@ -312,9 +288,11 @@ def turboStatus():
             G.turboActive = False
             logic.car["turboCoolTimer"] = 0
             G.turboCooldown = True
-            resetTopSpeed()
     elif G.turboCooldown == True:
         logic.car["turboDurTimer"] = 0
+        if logic.car.linVelocityMax > logic.car["myLinVelocityMax"]:
+            # Gently reset top speed
+            logic.car.linVelocityMax -= 2
         if logic.car["turboCoolTimer"] > logic.car["turboCooldown"]:
             G.turboCooldown = False
     else:
@@ -494,6 +472,7 @@ def makeInvisible():
     logic.scene.objects["Loop 4_proxy"].setVisible(False)
     logic.scene.objects["Loop 5_proxy"].setVisible(False)
     logic.scene.objects["Loop 6_proxy"].setVisible(False)
+    logic.scene.objects["Loop 7_proxy"].setVisible(False)
 
 # Set current shape visible again (when switching from first person camera, etc.)
 def makeVisible():
@@ -510,12 +489,16 @@ def makeVisible():
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
     elif showMe == 6:
         logic.scene.objects["Loop 6_proxy"].setVisible(True)
+    elif showMe == 7:
+        logic.scene.objects["Loop 7_proxy"].setVisible(True)
 
 
 #  Set default shape values (Green glider shape)
 def resetStats():
     # Max/Top Speed
-    logic.car.linVelocityMax = 60
+    logic.car["myLinVelocityMax"] = 54
+    # Ribbon speed bonus (*speedMult) and off ribbon hinderance (*2-speedMult)
+    logic.car["speedMult"]  = 1.25
 
     # Default Shape
     logic.car["activeShape"] = 1
@@ -575,7 +558,8 @@ def changeShape(choice):
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 2_proxy"].setVisible(True)
         logic.car["activeShape"] = 2
-        logic.car.linVelocityMax = 160
+        logic.car["myLinVelocityMax"] = 120
+        logic.car["speedMult"]  = 1.0
         logic.car["glideBonusY"] = 0.5
         logic.car["glideBonusZ"] = 0.42
         logic.car["glideCooldown"] = 20
@@ -599,7 +583,8 @@ def changeShape(choice):
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 3_proxy"].setVisible(True)
         logic.car["activeShape"] = 3
-        logic.car.linVelocityMax = 200
+        logic.car["myLinVelocityMax"] = 200
+        logic.car["speedMult"]  = 1.5
         logic.car["accelNormal"] = -18
         logic.car["accelTurbo"] = -25
         logic.car["turboDur"] = 8.0
@@ -625,7 +610,8 @@ def changeShape(choice):
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 4_proxy"].setVisible(True)
         logic.car["activeShape"] = 4
-        logic.car.linVelocityMax = 140
+        logic.car["myLinVelocityMax"] = 150
+        logic.car["speedMult"]  = 1.5
         logic.car["accelNormal"] = -12
         logic.car["turboDur"] = 16.0
         logic.car["turboCooldown"] = 18.0
@@ -645,7 +631,8 @@ def changeShape(choice):
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 5_proxy"].setVisible(True)
         logic.car["activeShape"] = 5
-        logic.car.linVelocityMax = 120
+        logic.car["myLinVelocityMax"] = 110
+        logic.car["speedMult"]  = 1.66
         logic.car["accelNormal"] = -22
         logic.car["accelTurbo"] = -30
         logic.car["turboDur"] = 5
@@ -665,7 +652,8 @@ def changeShape(choice):
         abilities["abilityRMB"] = 1
         logic.scene.objects["Loop 6_proxy"].setVisible(True)
         logic.car["activeShape"] = 6
-        logic.car.linVelocityMax = 90
+        logic.car["myLinVelocityMax"] = 75
+        logic.car["speedMult"]  = 1.66
         logic.car["accelNormal"] = -16
         logic.car["accelTurbo"] = -20
         logic.car["turboDur"] = 12
@@ -673,6 +661,26 @@ def changeShape(choice):
         logic.car["glideCooldown"] = 2.0
         logic.car["brakeForce"] = 8
         logic.car["steerAmount"] = 0.06
+        # Wheel/Handling Stats
+        bstat["stiffness"] = 30
+        bstat["Stability"] = 0.12
+        setWheelStats()
+    elif choice == 7:
+        # Kid Car
+        # Trades Glide for ability to stick to ribbons, free, easy to drive.
+        abilities["abilityLMB"] = 1
+        abilities["abilityRMB"] = 1
+        logic.scene.objects["Loop 7_proxy"].setVisible(True)
+        logic.car["activeShape"] = 7
+        logic.car["myLinVelocityMax"] = 41
+        logic.car["speedMult"]  = 1.25
+        logic.car["accelNormal"] = -8
+        logic.car["accelTurbo"] = -14
+        logic.car["turboDur"] = 5
+        logic.car["turboCooldown"] = 10.0
+        logic.car["glideCooldown"] = 2.0
+        logic.car["brakeForce"] = 9
+        logic.car["steerAmount"] = 0.035
         # Wheel/Handling Stats
         bstat["stiffness"] = 30
         bstat["Stability"] = 0.12
@@ -735,6 +743,8 @@ def keyHandler():
             changeShape(5)
         elif key[0] == events.PAD6:
             changeShape(6)
+        elif key[0] == events.PAD7:
+            changeShape(7)
 
 
 # Mouse Steering - called from bare object
