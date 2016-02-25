@@ -169,8 +169,6 @@ def ribbonCheck():
 # Called from bare object (player) every frame
 def carHandler():
     # Apply max/top speed constraint (any time we aren't changing it)
-    logic.car["test"] = logic.car.linVelocityMax
-    #if G.turboCooldown == False and G.turboActive == False:
     if logic.car["limitMaxVelocity"] == True:
         logic.car.linVelocityMax = logic.car["myLinVelocityMax"]
 
@@ -285,8 +283,7 @@ def applyTurbo():
 # Set Turbo status
 def turboStatus():
     # Prevent slowing down while doing a skijump
-    skiJumping = logic.scene.objects["SkiJumpStart"]
-    if skiJumping["jumping"] < 7:
+    if logic.car["skiJumping"] == True:
         return
 
     if G.turboActive == True:
@@ -320,31 +317,11 @@ def turboStatus():
     G.turboCoolTimerUI = str(int(logic.car["turboCooldown"] - logic.car["turboCoolTimer"]))
 
 
-# Toss the player a good distance, based on their current speed.
-# Called by collision with player at bottom ski jump
-# Logic Brick creates SkiJumpEnd object and parents to player
-def skiJumpStart():
-    cont = logic.getCurrentController()
-    cont.owner["jumping"] = 0
-    logic.car["limitMaxVelocity"] = False
-    logic.car.linVelocityMax = 5001
-    logic.car.linearVelocity[1] += 50
-    logic.car.linearVelocity[2] += 33
-
-
-# Called by SkiJumpEnd object when it hits something (namely the ground)
-# Also hard limited to 7 seconds by turboStatus(), which automatically brings speed down when not using turbo.
-def skiJumpEnd():
-    logic.car.linVelocityMax = logic.car["myLinVelocityMax"]
-    logic.car["limitMaxVelocity"] = True
-
-
 # Gliding/flying for aircraft shapes
 # Glide timer is kept at 0 while the player is holding spacebar down and is in the air
 def airGlide():
     # Prevent gliding while doing a skijump (avoid exploiting super high top speed)
-    skiJumping = logic.scene.objects["SkiJumpStart"]
-    if skiJumping["jumping"] < 7:
+    if logic.car["skiJumping"] == True:
         return
 
     if logic.car["onGround"] == True and logic.car["glideTimer"] > logic.car["glideCooldown"]:
@@ -468,6 +445,9 @@ def rescuePlayer():
     if logic.car["rescue"] > 5:
         # re-orient car (5 second cooldown)
         logic.car.position = (pos[0], pos[1], pos[2]+3.0)
+        # Reset chase cam in case it gets stuck
+        chaseCam = logic.scene.objects["cam0"]
+        chaseCam.position = logic.car.position
         logic.car["rescue"] = -10
     if logic.car["rescue"] < 0:
         # right the player
@@ -482,7 +462,9 @@ def rescuePlayer():
 def resetPlayer():
     rescuePlayer()
     changeShape(1)
-    logic.car.position = (0, 0, 8.0)
+    logic.car.position = (0, 0, 6.0)
+    chaseCam = logic.scene.objects["cam0"]
+    chaseCam.position = logic.car.position
 
 
 ########
@@ -599,6 +581,7 @@ def changeShape(choice):
         logic.car["steerAmount"] = 0.015
         # Wheel/Handling Stats
         bstat["stiffness"] = 30.0
+        bstat["damping"] = 4.0
         bstat["Stability"] = 0.1
         setWheelStats()
     elif choice == 3:
@@ -644,10 +627,11 @@ def changeShape(choice):
         logic.car["glideBonusZ"] = 0.43
         logic.car["glideCooldown"] = 15
         logic.car["glideDur"] = 12
-        logic.car["steerAmount"] = 0.075
+        logic.car["steerAmount"] = 0.045
         # Wheel/Handling Stats
         bstat["stiffness"] = 30
-        bstat["Stability"] = 0.1
+        bstat["damping"] = 4.0
+        bstat["Stability"] = 0.066
         #setWheelStats()
     elif choice == 5:
         # Scifimobile
@@ -666,7 +650,6 @@ def changeShape(choice):
         logic.car["brakeForce"] = 2
         logic.car["steerAmount"] = 0.06
         # Wheel/Handling Stats
-        bstat["influence"] = 0.01
         bstat["stiffness"] = 40.0
         bstat["Stability"] = 0.14
         setWheelStats()
