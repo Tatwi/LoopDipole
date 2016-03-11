@@ -225,7 +225,7 @@
       </ThemeUserInterface>
     </user_interface>
     <view_3d>
-      <ThemeView3D grid="#404040"
+      <ThemeView3D grid="#0B1B30"
                    wire="#000000"
                    wire_edit="#000000"
                    lamp="#00000028"
@@ -234,8 +234,8 @@
                    empty="#000000"
                    object_selected="#f15800"
                    object_active="#ffaa40"
-                   object_grouped="#083008"
-                   object_grouped_active="#55bb55"
+                   object_grouped="#116611"
+                   object_grouped_active="#61D661"
                    transform="#ffffff"
                    vertex="#000000"
                    vertex_select="#ff8500"
