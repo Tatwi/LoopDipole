@@ -52,8 +52,8 @@ def teleporterTV():
         logic.car.actuators["Explosion"].startSound()
     else:
         if rng > 85:
-            # Purple level, left eye, going East
-            scripts.teleport(240.0, 840.0, 226.0, 1)
+            # Purple level, left eye, going West
+            scripts.teleport(240.0, 840.0, 226.0, 3)
         elif rng > 60:
             # Blue level, going South
             scripts.teleport(-942.0, 1436.0, 201.0, 2)
