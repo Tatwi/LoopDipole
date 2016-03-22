@@ -467,6 +467,48 @@ def resetPlayer():
     chaseCam.position = logic.car.position
 
 
+# Set the heading and move the player (usually when teleporting)
+def changeHeading(heading):
+    if heading == 0:
+        # North
+        logic.car.alignAxisToVect([0.0,1.0,0.0], 1, 1.0)
+        logic.car.setLinearVelocity([0.0,90.0,0.0],0)
+    elif heading == 1:
+        # East
+        logic.car.alignAxisToVect([1.0,0.0,0.0], 1, 1.0)
+        logic.car.setLinearVelocity([90.0,0.0,0.0],0)
+    elif heading == 2:
+        # South
+        logic.car.alignAxisToVect([0.0,-1.0,0.0], 1, 1.0)
+        logic.car.setLinearVelocity([0.0,-90.0,0.0],0)
+    elif heading == 3:
+        # West
+        logic.car.alignAxisToVect([-1.0,0.0,0.0], 1, 1.0)
+        logic.car.setLinearVelocity([-90.0,0.0,0.0],0)
+
+    # Turn upright (because going backward through a portal will flip the player upside down)
+    logic.car.alignAxisToVect([0.0,0.0,1.0], 2, 1.0)
+
+
+# Teleport player
+def teleport(x, y, z, h):
+    cont = logic.getCurrentController()
+
+    # Stop motion
+    logic.car.setLinearVelocity([0.0,0.0,0.0],1)
+
+    # Relocate and apply new motion in the correct direction
+    logic.car.position = (x, y, z)
+    changeHeading(h)
+
+    # Reset chase cam in case it gets stuck
+    chaseCam = logic.scene.objects["cam0"]
+    chaseCam.position = logic.car.position
+
+    teleportSound = logic.scene.objects["Controller"].actuators["Load In"]
+    teleportSound.startSound()
+
+
 ########
 # BEGIN Changing shapes / setting stats and abilities
 ########

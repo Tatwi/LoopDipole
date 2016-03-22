@@ -22,6 +22,8 @@ from bge import render as r
 import math
 from random import randint
 import GameLogic as G
+# Allow use of functions in the script.py file
+import scripts
 
 
 # Toss the player a good distance, based on their current speed.
@@ -49,19 +51,22 @@ def teleporterTV():
     if rng < 33:
         logic.car.actuators["Explosion"].startSound()
     else:
-        logic.car.setLinearVelocity([0.0,0.0,0.0],1)
         if rng > 85:
-            # Purple level, left eye
-            logic.car.position = (98.0, 870.0, 231.0)
+            # Purple level, left eye, going East
+            scripts.teleport(240.0, 840.0, 226.0, 1)
         elif rng > 60:
-            # Blue level
-            logic.car.position = (-995, 961, 206.0)
+            # Blue level, going South
+            scripts.teleport(-942.0, 1436.0, 201.0, 2)
         elif rng > 32:
-            # Yellow level, right foot
-            logic.car.position = (-980, -1077, 106.0)
+            # Yellow level, right foot, going West
+            scripts.teleport(-356.13, -1071.5, 101.0, 3)
 
-        teleportSound = logic.scene.objects["Controller"].actuators["Load In"]
-        teleportSound.startSound()
+
+# Single desitination portal. Called by Portal objects on collision with player.
+# Destination stored in the object.
+def portal():
+    cont = logic.getCurrentController()
+    scripts.teleport(cont.owner["x"], cont.owner["y"], cont.owner["z"], cont.owner["heading"])
 
 
 # Define objects for use in this script
