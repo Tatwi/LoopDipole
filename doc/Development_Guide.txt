@@ -5,7 +5,7 @@ www.tpot.ca
 
 General Public Licence v3
 - ~ - ~ - ~ - ~ - ~ - ~ - ~
-Updated: 2016.01.21
+Updated: 2016.03.23
 - ~ - ~ - ~ - ~ - ~ - ~ - ~
 
 This document is a general overview of how I have broken the development of the game into chunks and the order in which I am most likely to complete them. I feel it's important in a huge undertaking such as making a game to focus my efforts, as much as possible, on completing one thing before moving on to the next. However, there is a practical limit to such compartmentalization, due to how various parts of the game depend on each other. Sometimes you just need to go ahead and make some blocks to shoot, so you can tell that moving around shooting stuff feels right!
@@ -63,13 +63,18 @@ This document is a general overview of how I have broken the development of the 
 - QA world for collision issues, normals, etc.
 -----------------
 
-[Begun] Build the World!
+[Complete] Build the World!
 -----------------
 - Build ribbons (roadways).
-- Add areas of chaos (water), hills, mountains.
-- Add 20 different fountain puzzle structures.
-- Add a few decorative structures for testing scale.
+- Build the world (hills, mountains, water, chaos, etc).
 - Finalize world textures.
+- Create locales that can be populated with decorations and used in the mission system
+-----------------
+
+[Begun] Structures
+-----------------
+- Add 20 different fountain puzzle structures.
+- Add decorative structures.
 -----------------
 
 [Begun] Player Abilities
@@ -81,7 +86,7 @@ This document is a general overview of how I have broken the development of the 
 - Program player hit points.
 -----------------
 
-UI In Game
+[Begun] UI In Game
 -----------------
 - Display hit points.
 - Display stored energy values.
@@ -108,9 +113,8 @@ Enemies
 - Program character and structure behavior.
 -----------------
 
-Sounds
+[Begun] Sounds
 -----------------
-- Remake intro song!
 - Create/Add ambient sounds for world, player, and enemies.
 - Create/Add sounds for player and enemies abilities.
 - Decide if a sound track is worth making.

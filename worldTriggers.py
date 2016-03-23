@@ -55,8 +55,8 @@ def teleporterTV():
             # Purple level, left eye, going West
             scripts.teleport(240.0, 840.0, 226.0, 3)
         elif rng > 60:
-            # Blue level, going South
-            scripts.teleport(-942.0, 1436.0, 201.0, 2)
+            # Top of Ski Jump, going South
+            scripts.teleport(302.5, 520.0, 226.0, 2)
         elif rng > 32:
             # Yellow level, right foot, going West
             scripts.teleport(-356.13, -1071.5, 101.0, 3)
