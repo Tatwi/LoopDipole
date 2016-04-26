@@ -215,4 +215,32 @@ def screenshot():
 ########################################
 
 
-
+# Save settings
+def saveSettings():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    fileName = "settings.txt"
+    
+    # Prevent crash by not allowing resolution to be greater than the screen can use.
+    scene = logic.getCurrentScene()
+    settings = scene.objects["Controller"]
+    if own["height"] > settings["desktopHeight"]:
+        return
+    
+    file = open(path+fileName,'w')
+    # Resolution
+    file.write(str(own["width"]) + ',')
+    file.write(str(own["height"]) + ',')
+    
+# Load settings
+def loadSettings():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    fileName = "settings.txt"
+    
+    file = open(path+fileName,'r')
+    line = file.readline().replace('\n','').split(',')
+    
+    # Resoultion
+    own["width"] = int(line[0])
+    own["height"] = int(line[1])

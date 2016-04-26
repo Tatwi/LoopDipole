@@ -25,15 +25,32 @@ Recomended:
     CPU: AMD FX-8320 (8 Cores at 4GHz - Roughly the same as a 3GHz Intel i5)
 
 
-Running the Game:
-    NOTE: Eventually I will make a handy installer so the game runs like any other game in Linux and Windows. Until then, do this:
+Running the Game in General:
+    
+    NOTE: Eventually I will make a handy installer so the game runs like any other game in Linux and Windows. 
+    Until then, you can do this:
+    
     1. Download/Install Blender 2.69. Please note that some things only work in Blender version 2.69, so use it.
         https://www.blender.org/features/past-releases/2-69/
     2. Download and unzip the game.
         https://github.com/Tatwi/LoopDipole
     3. Launch Blender.
-    4. Open level1.blend.
+    4. Open start.blend.
     5. In the lower right area, under the "Standalone Player" heading, choose your resolution/options, and hit "Start".
+    
+    
+Running on Linux Mint 17:
+    1. Install Blender 2.69 with the package manager or apt.
+    2. Download and unzip the game.
+        https://github.com/Tatwi/LoopDipole
+    3. Move the game folder to /opt/LoopDipole
+        sudo mv LoopDipole /opt
+    4. Make the folder writable, so that settings, profiles, and screenshots can be saved!
+        sudo chown -R YOURUSERNAME:user /opt/LoopDipole
+        chmod 777 -R /opt/LoopDipole
+    4. Create a menu link for all users by copying the LoopDipole.desktop program launching shortcut file to /usr/share/applications folder.
+        sudo cp LoopDipole.desktop /usr/share/applications
+    5. Now all users can play the game like any other installed game, by clicking an icon in the program menu.
 
 
 Game Play:

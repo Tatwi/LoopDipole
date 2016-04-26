@@ -16,6 +16,7 @@ Functions for the general interface.
 
 import Rasterizer
 import GameLogic as G
+import bge
 from bge import logic
 
 def showMouse():
@@ -97,3 +98,120 @@ def displayGlideStatus():
         elif G.cornerAssist == True:
             cont.owner["Text"] = "Glide: On"
 
+
+###############
+# Menu Screens
+###############
+
+# Find the max screen height
+# start.blend is set to start at the desktop resolution by default, so each time it 
+# loads it saves the desktop height, then changes to the resolution saved in settings.
+def maxDesktopHeight():
+    cont = logic.getCurrentController()
+    rend = bge.render
+    cont.owner["desktopHeight"] = rend.getWindowHeight()
+
+
+# Displays the current resolution on the settings screen.
+def displayResolution():
+    cont = logic.getCurrentController()
+    rend = bge.render
+    width = rend.getWindowWidth()
+    height = rend.getWindowHeight()
+    cont.owner["Text"] = "(" + str(width) + "x" + str(height) + ")"
+
+
+# Set Resolution
+# Values saved in Button.SettingsApply object in start.blend file
+def setResolution():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    rend = bge.render
+    
+    scene = logic.getCurrentScene()
+    settings = scene.objects["Controller"]
+    
+    if own["height"] > settings["desktopHeight"]:
+        # Prevent crash by not allowing resolution to be greater than the screen can use.
+        rend.setWindowSize(800, 600)
+        warning = scene.objects["WarningSpawn"]
+        warning.actuators["Resolution"].instantAddObject()
+        return
+    else:
+        rend.setWindowSize( own["width"], own["height"])
+    
+    
+# Select Resolution
+# Values saved in Button.SettingsApply object in start.blend file
+# Called from settings menu when player clicks a resolution
+def selectResolution():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    scene = logic.getCurrentScene()
+    settings = scene.objects["Button.SettingsApply"]
+    settings["width"] = own["width"]
+    settings["height"] = own["height"]
+    
+    scene.objects["Button.Res1"].setVisible(False)
+    scene.objects["Button.Res2"].setVisible(False)
+    scene.objects["Button.Res3"].setVisible(False)
+    scene.objects["Button.Res4"].setVisible(False)
+    scene.objects["Button.Res5"].setVisible(False)
+    scene.objects["Button.Res6"].setVisible(False)
+    own.setVisible(True)
+
+
+def profileOver():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    
+    mouse = cont.sensors["Over"]
+    status = mouse.status
+    mouseTarget = mouse.hitObject
+    
+    if status == 1 or own["selected"] == True:
+        # Mouse over or selected
+        own.setVisible(True)
+    elif status == 3:
+        # Mouse out
+        own.setVisible(False)
+        own["selected"] = False
+        
+def profileClick():
+    cont = logic.getCurrentController()
+    own = cont.owner
+    scene = logic.getCurrentScene()
+    
+    mouseOver = cont.sensors["Over"]
+    statusOver = mouseOver.status
+    mouseTarget = mouseOver.hitObject
+    
+    mouseClick = cont.sensors["Over"]
+    statusClick = mouseClick.status
+    
+    # Set selected profile on click
+    if statusClick == 2 and mouseTarget == own:
+        playButton = scene.objects["Button.Play"]
+        playButton["profile"] = own["profile"]
+        own["selected"] = True
+        
+        # Deselect other profile
+        if own["profile"] != 1:
+            profile1 = scene.objects["Button.Profile1"]
+            profile1["selected"] = False
+            profile1.setVisible(False)
+        if own["profile"] != 2:
+            profile2 = scene.objects["Button.Profile2"]
+            profile2["selected"] = False
+            profile2.setVisible(False)
+        if own["profile"] != 3:
+            profile3 = scene.objects["Button.Profile3"]
+            profile3["selected"] = False
+            profile3.setVisible(False)
+        if own["profile"] != 4:
+            profile4 = scene.objects["Button.Profile4"]
+            profile4["selected"] = False
+            profile4.setVisible(False)
+    
+
+    

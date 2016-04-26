@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Loop Dipole and the Chaoties
+GenericName=Loop Dipole and the Chaoties
+Comment=A whimsical driving/flying puzzle game, made with the Blender Game Engine.
+Icon=/opt/LoopDipole/icon.png
+Categories=Game;ArcadeGame;
+Exec=blenderplayer -f /opt/LoopDipole/start.blend
